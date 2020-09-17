@@ -1,0 +1,6 @@
+{
+	"presets" : [
+		[ "@babel/env", { "loose" : true, "useBuiltIns" : false } ]
+	],
+	"compact"   : false
+}
