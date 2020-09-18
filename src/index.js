@@ -1,22 +1,4 @@
-import { matchExpr, } from "./regex";
-import core from "./core.js";
-/**
- * Find Handlers
- */
-import "./find/elementsMatcher";
-import "./find/filterAdapter";
-import "./find/findElements";
-import "./find/finder";
-import "./find/searchElements";
-import "./selectors/index";
-import "./functions.js";
+import query, { find, is } from "./sonic-engine/index";
+import "./pseudos/index";
 
-let Expr   = core.selectors;
-Expr.match = matchExpr;
-
-function SetFilters() {
-}
-
-Expr.filters    = SetFilters.prototype = Expr.pseudos;
-Expr.setFilters = new SetFilters();
-export default core;
+export default { find: find, is: is, query: query };
