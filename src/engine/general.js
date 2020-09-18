@@ -7,22 +7,26 @@ import core from "../core";
 export default {
 	attribute: attributesCompile,
 	pseudo: PseudosCompile,
-	tag( next, data, { adapter } ) {
+	tag(next, data, { adapter }) {
 		const { name } = data;
-		return ( elem ) => adapter.getName( elem ) === name && next( elem );
-	},
-	descendant( next, data, { adapter } ) {
-		// eslint-disable-next-line no-undef
-		const isFalseCache = !isUndefined( WeakSet ) ? new WeakSet() : null;
 
-		return function descendant( elem ) {
+		return (elem) => adapter.getName(elem) === name && next(elem);
+	},
+
+	//traversal
+	descendant(next, data, { adapter }) {
+		// eslint-disable-next-line no-undef
+		const isFalseCache =
+				  typeof WeakSet !== "undefined" ? new WeakSet() : null;
+
+		return function descendant(elem) {
 			let found = false;
 
-			while( !found && ( elem = adapter.getParent( elem ) ) ) {
-				if( !isFalseCache || !isFalseCache.has( elem ) ) {
-					found = next( elem );
-					if( !found && isFalseCache ) {
-						isFalseCache.add( elem );
+			while (!found && (elem = adapter.getParent(elem))) {
+				if (!isFalseCache || !isFalseCache.has(elem)) {
+					found = next(elem);
+					if (!found && isFalseCache) {
+						isFalseCache.add(elem);
 					}
 				}
 			}
@@ -30,73 +34,67 @@ export default {
 			return found;
 		};
 	},
-	_flexibleDescendant( next, data, { adapter } ) {
+	_flexibleDescendant(next, data, { adapter }) {
 		// Include element itself, only used while querying an array
-		return function descendant( elem ) {
-			let found = next( elem );
+		return function descendant(elem) {
+			let found = next(elem);
 
-			while( !found && ( elem = adapter.getParent( elem ) ) ) {
-				found = next( elem );
+			while (!found && (elem = adapter.getParent(elem))) {
+				found = next(elem);
 			}
 
 			return found;
 		};
 	},
-	parent( next, data, options ) {
-		if( options.strict ) {
-			core.error( 'Parent selector isn\'t part of CSS3' );
+	parent(next, data, options) {
+		if (options.strict) {
+			throw new Error("Parent selector isn't part of CSS3");
 		}
 
 		const { adapter } = options;
 
-		return ( elem ) => adapter.getChildren( elem ).some( test );
+		return (elem) => adapter.getChildren(elem).some(test);
 
-		function test( elem ) {
-			return adapter.isTag( elem ) && next( elem );
+		function test(elem) {
+			return adapter.isTag(elem) && next(elem);
 		}
 	},
-	child( next, data, { adapter } ) {
-		return function child( elem ) {
-			const parent = adapter.getParent( elem );
-			return !!parent && next( parent );
+	child(next, data, { adapter }) {
+		return function child(elem) {
+			const parent = adapter.getParent(elem);
+			return !!parent && next(parent);
 		};
 	},
-	sibling( next, data, { adapter } ) {
-		return function sibling( elem ) {
-			const siblings = adapter.getSiblings( elem );
+	sibling(next, data, { adapter }) {
+		return function sibling(elem) {
+			const siblings = adapter.getSiblings(elem);
 
-			for( let i = 0; i < siblings.length; i++ ) {
-				if( adapter.isTag( siblings[ i ] ) ) {
-					if( siblings[ i ] === elem ) {
-						break;
-					}
-					if( next( siblings[ i ] ) ) {
-						return true;
-					}
+			for (let i = 0; i < siblings.length; i++) {
+				if (adapter.isTag(siblings[i])) {
+					if (siblings[i] === elem) break;
+					if (next(siblings[i])) return true;
 				}
 			}
 
 			return false;
 		};
 	},
-	adjacent( next, data, { adapter } ) {
-		return function adjacent( elem ) {
-			const siblings = adapter.getSiblings( elem );
+	adjacent(next, data, { adapter }) {
+		return function adjacent(elem) {
+			const siblings = adapter.getSiblings(elem);
 			let lastElement;
 
-			for( let i = 0; i < siblings.length; i++ ) {
-				if( adapter.isTag( siblings[ i ] ) ) {
-					if( siblings[ i ] === elem ) {
-						break;
-					}
-					lastElement = siblings[ i ];
+			for (let i = 0; i < siblings.length; i++) {
+				if (adapter.isTag(siblings[i])) {
+					if (siblings[i] === elem) break;
+					lastElement = siblings[i];
 				}
 			}
 
-			return !!lastElement && next( lastElement );
+			return !!lastElement && next(lastElement);
 		};
 	},
-	universal( next ) {
+	universal(next) {
 		return next;
 	},
 };
