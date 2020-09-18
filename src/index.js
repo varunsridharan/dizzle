@@ -1,4 +1,5 @@
-import query, { find, is } from "./sonic-engine/index";
-import "./pseudos/index";
+import core from "./core";
+import compile from "./engine";
 
-export default { find: find, is: is, query: query };
+core.compile = compile;
+export default core;
