@@ -90,7 +90,7 @@ function parseSelector( subselects, selector ) {
 				selector               = selector.substr( 1 );
 				tokens.push( {
 					type: 'attr',
-					name, action,
+					id: name, action,
 					val: getName(),
 					igCase: false,
 				} );
@@ -106,7 +106,7 @@ function parseSelector( subselects, selector ) {
 				name                                                          = name.toLowerCase();
 				tokens.push( {
 					type: 'attr',
-					name,
+					id:name,
 					action: actionType || '=',
 					val: unescapeCSS( value ),
 					igCase: !!igCase,
@@ -114,7 +114,7 @@ function parseSelector( subselects, selector ) {
 			} else if( firstChar === ':' ) {
 				if( selector.charAt( 1 ) === ':' ) {
 					selector = selector.substr( 2 );
-					tokens.push( { type: 'pseudo-element', name: getName().toLowerCase() } );
+					tokens.push( { type: 'pseudo-element', id: getName().toLowerCase() } );
 					continue;
 				}
 				selector   = selector.substr( 1 );
@@ -162,11 +162,11 @@ function parseSelector( subselects, selector ) {
 						}
 					}
 				}
-				tokens.push( { type: 'pseudo', name, data } );
+				tokens.push( { type: 'pseudo', id:name, data } );
 			} else if( reName.test( selector ) ) {
 				let name = getName();
 				name     = name.toLowerCase();
-				tokens.push( { type: 'tag', name } );
+				tokens.push( { type: 'tag', id:name } );
 			} else {
 				if( tokens.length && tokens[ tokens.length - 1 ].type === 'descendant' ) {
 					tokens.pop();

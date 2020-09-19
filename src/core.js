@@ -1,14 +1,9 @@
-function Dizzle() {
+function Dizzle( selector, context ) {
+	return Dizzle.find( selector, context );
 }
 
-Dizzle.err = ( msg ) => {
+Dizzle.err = msg => {
 	throw new Error( msg );
-};
-
-Dizzle.log = function() {
-	console.group( 'Dizzle Log : ' );
-	console.log( ...arguments );
-	console.groupEnd();
 };
 
 const core = Dizzle;

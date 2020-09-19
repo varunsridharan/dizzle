@@ -1,7 +1,7 @@
 import isString from "../typechecking/isString";
 
 export function stringifyToken( token ) {
-	let { type, name, val, igCase, action, data } = token;
+	let { type, id, val, igCase, action, data } = token;
 	switch( type ) {
 		// Simple types
 		case '>':
@@ -13,28 +13,28 @@ export function stringifyToken( token ) {
 		case 'descendant':
 			return ' ';
 		case 'tag':
-			return name;
+			return id;
 		case 'pseudo-element':
-			return `::${name}`;
+			return `::${id}`;
 		case 'pseudo':
 			if( data === null ) {
-				return `:${name}`;
+				return `:${id}`;
 			}
 			if( isString( data ) ) {
-				return `:${name}(${data})`;
+				return `:${id}(${data})`;
 			}
-			return `:${name}(${TokentoString( data )})`;
+			return `:${id}(${TokentoString( data )})`;
 		case 'attr':
 			if( action === 'exists' ) {
-				return `[${name}]`;
+				return `[${id}]`;
 			}
-			if( name === 'id' && action === 'equals' && !igCase ) {
+			if( id === 'id' && action === 'equals' && !igCase ) {
 				return `#${val}`;
 			}
-			if( name === 'class' && action === 'element' && !igCase ) {
+			if( id === 'class' && action === 'element' && !igCase ) {
 				return `.${val}`;
 			}
-			return `[${name}${action}'${val}'${igCase ? 'i' : ''}]`;
+			return `[${id}${action}'${val}'${igCase ? 'i' : ''}]`;
 	}
 }
 

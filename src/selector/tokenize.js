@@ -26,14 +26,14 @@ export default function( selector ) {
 
 
 		tokens.map( token => {
-			let { type, name, action } = token;
+			let { type, id, action } = token;
 			if( 'tag' === type ) {
-				store( name );
+				store( id );
 			} else if( 'descendant' === type ) {
 				store( ' ' );
 			} else if( 'attr' === type ) {
-				if( 'id' === name || 'class' === name && 'element' === action ) {
-					let element_type = ( 'id' === name ) ? '#' : '.';
+				if( 'id' === id || 'class' === id && 'element' === action ) {
+					let element_type = ( 'id' === id ) ? '#' : '.';
 					store( element_type );
 					store( token.val );
 				} else if( BrowserSupportedOperators.indexOf( action ) >= 0 ) {

@@ -31,6 +31,6 @@ function find( selectors, context ) {
 
 export default function( selector, context = defaultDom ) {
 	let parsed = tokenize( selector );
-	core.log( parsed );
+	console.log( parsed );
 	return find( parsed, context );
 }
