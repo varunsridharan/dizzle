@@ -3,6 +3,7 @@ import core from "../core";
 import isString from "../typechecking/isString";
 import isPlainObject from "../typechecking/isPlainObject";
 import { Traversals } from "../vars";
+import { createCache } from "../helper";
 
 const attribSelectors        = {
 		  '#': [ 'id', 'equals' ],
@@ -12,6 +13,7 @@ const attribSelectors        = {
 	  stripQuotesFromPseudos = new Set( [ 'contains', 'icontains' ] ),
 	  quotes                 = new Set( [ '"', '\'' ] );
 const fcc                    = String.fromCharCode;
+const parseCache             = createCache();
 
 // Unescape function taken from https://github.com/jquery/sizzle/blob/master/src/sizzle.js#L152
 function funescape( _, escaped, escapedWhitespace ) {
@@ -19,8 +21,18 @@ function funescape( _, escaped, escapedWhitespace ) {
 	return high !== high || escapedWhitespace ? escaped : high < 0 ? fcc( high + 0x10000 ) : fcc( ( high >> 10 ) | 0xd800, ( high & 0x3ff ) | 0xdc00 );
 }
 
-function unescapeCSS( str ) {
+function unescapeCSS2( str ) {
 	return str.replace( reEscape, funescape );
+}
+
+
+function unescapeCSS( str ) {
+	return str.replace( /\\(?:([0-9a-f]{1,6} ?)|(.))/ig, ( match, hex, char ) => {
+		if( hex ) {
+			return String.fromCharCode( parseInt( hex, 16 ) );
+		}
+		return char;
+	} );
 }
 
 function isWhitespace( c ) {
@@ -60,6 +72,7 @@ function parseSelector( subselects, selector ) {
 
 	while( selector !== '' ) {
 		const firstChar = selector.charAt( 0 );
+
 		if( isWhitespace( firstChar ) ) {
 			sawWS = true;
 			stripWhitespace( 1 );
@@ -106,7 +119,7 @@ function parseSelector( subselects, selector ) {
 				name                                                          = name.toLowerCase();
 				tokens.push( {
 					type: 'attr',
-					id:name,
+					id: name,
 					action: actionType || '=',
 					val: unescapeCSS( value ),
 					igCase: !!igCase,
@@ -162,11 +175,11 @@ function parseSelector( subselects, selector ) {
 						}
 					}
 				}
-				tokens.push( { type: 'pseudo', id:name, data } );
+				tokens.push( { type: 'pseudo', id: name, data } );
 			} else if( reName.test( selector ) ) {
 				let name = getName();
 				name     = name.toLowerCase();
-				tokens.push( { type: 'tag', id:name } );
+				tokens.push( { type: 'tag', id: name } );
 			} else {
 				if( tokens.length && tokens[ tokens.length - 1 ].type === 'descendant' ) {
 					tokens.pop();
@@ -188,10 +201,15 @@ function addToken( subselects, tokens ) {
 }
 
 export default function parse( selector ) {
+	let cached = parseCache( selector );
+	if( cached ) {
+		return cached;
+	}
+	cached = selector;
 	const subselects = [];
 	selector         = parseSelector( subselects, `${selector}` );
 	if( selector !== '' ) {
 		core.err( `Unmatched selector: ${selector}` );
 	}
-	return subselects;
+	return parseCache( cached, subselects );
 }

@@ -4,6 +4,10 @@ import isString from "../typechecking/isString";
 import isPlainObject from "../typechecking/isPlainObject";
 import { BrowserSupportedPseudo, BrowserSupportedOperators, Traversals } from "../vars";
 import core from "../core";
+import isUndefined from "../typechecking/isUndefined";
+import { createCache } from "../helper";
+
+const Tokenizedcache = createCache();
 
 /**
  * Converts CSS Pasred Object into queryable Data.
@@ -11,7 +15,12 @@ import core from "../core";
  * @return {*[][]}
  */
 export default function( selector ) {
-	return parse( selector ).map( ( tokens ) => {
+	let cached = Tokenizedcache( selector );
+	if( !isUndefined( cached ) ) {
+		return cached;
+	}
+	cached     = selector;
+	let parsed = parse( selector ).map( ( tokens ) => {
 		const renderedSelectors = [];
 		let selector            = [];
 		const store             = ( data ) => {
@@ -51,4 +60,5 @@ export default function( selector ) {
 		renderedSelectors.push( selector.join( '' ) );
 		return renderedSelectors.filter( value => ( '' !== value ) );
 	} );
+	return Tokenizedcache( cached, parsed );
 }
