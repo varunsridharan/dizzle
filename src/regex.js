@@ -1,3 +1,4 @@
-export var reChars = /[-[\]{}()*+?.,\\^$|#\s]/g;
-export var re_nthElement = /^([+\-]?\d*n)?\s*(?:([+\-]?)\s*(\d+))?$/
-export var re_CSS3 = /^(?:(?:nth|last|first|only)-(?:child|of-type)|root|empty|(?:en|dis)abled|checked|not)$/;
+export const reName   = /^[^\\]?(?:\\(?:[\da-f]{1,6}\s?|.)|[\w\-\u00b0-\uFFFF])+/,
+			 reEscape = /\\([\da-f]{1,6}\s?|(\s)|.)/gi,
+			 // Modified version of https://github.com/jquery/sizzle/blob/master/src/sizzle.js#L87
+			 reAttr   = /^\s*((?:\\.|[\w\u00b0-\uFFFF-])+)\s*(?:(\S?)=\s*(?:(['"])([^]*?)\3|(#?(?:\\.|[\w\u00b0-\uFFFF-])*)|)|)\s*(i)?\]/;

@@ -1,14 +1,4 @@
-
 import core from "./core";
-import compile from "./engine";
+import "./engine";
 
-core.get = compile;
-export default compile;
-
-
-
-/*
-import cssSelect from "css-select/index.js";
-
-export default cssSelect;
-*/
+export default core;
