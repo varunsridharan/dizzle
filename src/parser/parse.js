@@ -11,11 +11,12 @@ const attribSelectors        = {
 	  unpackPseudos          = new Set( [ 'has', 'not', 'matches', 'is' ] ),
 	  stripQuotesFromPseudos = new Set( [ 'contains', 'icontains' ] ),
 	  quotes                 = new Set( [ '"', '\'' ] );
+const fcc                    = String.fromCharCode;
 
 // Unescape function taken from https://github.com/jquery/sizzle/blob/master/src/sizzle.js#L152
 function funescape( _, escaped, escapedWhitespace ) {
 	const high = parseInt( escaped, 16 ) - 0x10000;
-	return high !== high || escapedWhitespace ? escaped : high < 0 ? String.fromCharCode( high + 0x10000 ) : String.fromCharCode( ( high >> 10 ) | 0xd800, ( high & 0x3ff ) | 0xdc00 );
+	return high !== high || escapedWhitespace ? escaped : high < 0 ? fcc( high + 0x10000 ) : fcc( ( high >> 10 ) | 0xd800, ( high & 0x3ff ) | 0xdc00 );
 }
 
 function unescapeCSS( str ) {
@@ -33,7 +34,7 @@ function parseSelector( subselects, selector ) {
 	function getName() {
 		const match = selector.match( reName );
 		if( !match ) {
-			core.error( `Expected name, found ${selector}` );
+			core.err( `Expected name, found ${selector}` );
 		}
 		const [ sub ] = match;
 		selector      = selector.substr( sub.length );
@@ -68,7 +69,7 @@ function parseSelector( subselects, selector ) {
 			stripWhitespace( 1 );
 		} else if( firstChar === ',' ) {
 			if( tokens.length === 0 ) {
-				core.error( 'Empty sub-selector' );
+				core.err( 'Empty sub-selector' );
 			}
 			subselects.push( tokens );
 			tokens = [];
@@ -83,32 +84,32 @@ function parseSelector( subselects, selector ) {
 			}
 			if( firstChar === '*' ) {
 				selector = selector.substr( 1 );
-				tokens.push( { type: 'universal' } );
+				tokens.push( { type: '*' } );
 			} else if( firstChar in attribSelectors ) {
 				const [ name, action ] = attribSelectors[ firstChar ];
 				selector               = selector.substr( 1 );
 				tokens.push( {
-					type: 'attribute',
+					type: 'attr',
 					name, action,
-					value: getName(),
-					ignoreCase: false,
+					val: getName(),
+					igCase: false,
 				} );
 			} else if( firstChar === '[' ) {
 				selector             = selector.substr( 1 );
 				const attributeMatch = selector.match( reAttr );
 				if( !attributeMatch ) {
-					core.error( `Malformed attribute selector: ${selector}` );
+					core.err( `Malformed attribute selector: ${selector}` );
 				}
-				const [ completeSelector, baseName, actionType, , quotedValue = "", value = quotedValue, ignoreCase, ] = attributeMatch;
+				const [ completeSelector, baseName, actionType, , quotedValue = "", value = quotedValue, igCase, ] = attributeMatch;
 				selector                                                      = selector.substr( completeSelector.length );
 				let name                                                      = unescapeCSS( baseName );
 				name                                                          = name.toLowerCase();
 				tokens.push( {
-					type: 'attribute',
+					type: 'attr',
 					name,
 					action: actionType || '=',
-					value: unescapeCSS( value ),
-					ignoreCase: !!ignoreCase,
+					val: unescapeCSS( value ),
+					igCase: !!igCase,
 				} );
 			} else if( firstChar === ':' ) {
 				if( selector.charAt( 1 ) === ':' ) {
@@ -128,13 +129,13 @@ function parseSelector( subselects, selector ) {
 						selector     = parseSelector( data, selector );
 						if( quoted ) {
 							if( !selector.startsWith( quot ) ) {
-								core.error( `Unmatched quotes in :${name}` );
+								core.err( `Unmatched quotes in :${name}` );
 							} else {
 								selector = selector.substr( 1 );
 							}
 						}
 						if( !selector.startsWith( ')' ) ) {
-							core.error( `Missing closing parenthesis in :${name} (${selector})` );
+							core.err( `Missing closing parenthesis in :${name} (${selector})` );
 						}
 						selector = selector.substr( 1 );
 					} else {
@@ -148,7 +149,7 @@ function parseSelector( subselects, selector ) {
 							}
 						}
 						if( counter ) {
-							core.error( 'Parenthesis not matched' );
+							core.err( 'Parenthesis not matched' );
 						}
 						data     = selector.substr( 1, pos - 2 );
 						selector = selector.substr( pos );
@@ -167,8 +168,7 @@ function parseSelector( subselects, selector ) {
 				name     = name.toLowerCase();
 				tokens.push( { type: 'tag', name } );
 			} else {
-				if( tokens.length &&
-					tokens[ tokens.length - 1 ].type === 'descendant' ) {
+				if( tokens.length && tokens[ tokens.length - 1 ].type === 'descendant' ) {
 					tokens.pop();
 				}
 				addToken( subselects, tokens );
@@ -182,7 +182,7 @@ function parseSelector( subselects, selector ) {
 
 function addToken( subselects, tokens ) {
 	if( subselects.length > 0 && tokens.length === 0 ) {
-		core.error( 'Empty sub-selector' );
+		core.err( 'Empty sub-selector' );
 	}
 	subselects.push( tokens );
 }
@@ -191,67 +191,7 @@ export default function parse( selector ) {
 	const subselects = [];
 	selector         = parseSelector( subselects, `${selector}` );
 	if( selector !== '' ) {
-		core.error( `Unmatched selector: ${selector}` );
+		core.err( `Unmatched selector: ${selector}` );
 	}
 	return subselects;
-}
-
-/**
- Backs To String
- */
-function stringifySubselector( token ) {
-	return token.map( stringifyToken ).join( '' );
-}
-
-function stringifyToken( token ) {
-	switch( token.type ) {
-		// Simple types
-		case '>':
-			return ' > ';
-		case '<':
-			return ' < ';
-		case '~':
-			return ' ~ ';
-		case '+':
-			return ' + ';
-		case 'descendant':
-			return ' ';
-		case 'universal':
-			return '*';
-		case 'tag':
-			return escapeName( token.name );
-		case 'pseudo-element':
-			return `::${escapeName( token.name )}`;
-		case 'pseudo':
-			if( token.data === null ) {
-				return `:${escapeName( token.name )}`;
-			}
-			if( isString( token.data ) ) {
-				return `:${escapeName( token.name )}(${token.data})`;
-			}
-			return `:${escapeName( token.name )}(${TokentoString( token.data )})`;
-		case 'attribute':
-			if( token.action === 'exists' ) {
-				return `[${escapeName( token.name )}]`;
-			}
-			if( token.name === 'id' && token.action === 'equals' && !token.ignoreCase ) {
-				return `#${escapeName( token.value )}`;
-			}
-			if( token.name === 'class' && token.action === 'element' && !token.ignoreCase ) {
-				return `.${escapeName( token.value )}`;
-			}
-			return `[${escapeName( token.name )}${token.action}'${escapeName( token.value )}'${token.ignoreCase ? 'i' : ''}]`;
-	}
-}
-
-function escapeName( str ) {
-	// TODO
-	return str;
-}
-
-export function TokentoString( token ) {
-	if( isPlainObject( token ) ) {
-		return stringifyToken( token );
-	}
-	return token.map( stringifySubselector ).join( ', ' );
 }

@@ -1,9 +1,9 @@
-import parse, { TokentoString } from "../core/parse";
+import parse from "../parser/parse";
+import { stringifyToken } from "../parser/stringify";
 import isString from "../typechecking/isString";
 import isPlainObject from "../typechecking/isPlainObject";
 import { BrowserSupportedPseudo, BrowserSupportedOperators, Traversals } from "../vars";
 import core from "../core";
-import isUndefined from "../typechecking/isUndefined";
 
 /**
  * Converts CSS Pasred Object into queryable Data.
@@ -26,18 +26,18 @@ export default function( selector ) {
 
 
 		tokens.map( token => {
-			let type = token.type;
+			let { type, name, action } = token;
 			if( 'tag' === type ) {
-				store( token.name );
+				store( name );
 			} else if( 'descendant' === type ) {
 				store( ' ' );
-			} else if( 'attribute' === type ) {
-				if( 'id' === token.name || 'class' === token.name && token.action === 'element' ) {
-					let element_type = ( 'id' === token.name ) ? '#' : '.';
+			} else if( 'attr' === type ) {
+				if( 'id' === name || 'class' === name && 'element' === action ) {
+					let element_type = ( 'id' === name ) ? '#' : '.';
 					store( element_type );
-					store( token.value );
-				} else if( BrowserSupportedOperators.indexOf( token.action ) >= 0 ) {
-					store( TokentoString( token ) );
+					store( token.val );
+				} else if( BrowserSupportedOperators.indexOf( action ) >= 0 ) {
+					store( stringifyToken( token ) );
 				} else {
 					store( token );
 				}

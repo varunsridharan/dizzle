@@ -1,10 +1,7 @@
-import parse from "./core/parse";
-import engine from "./engine";
-
 function Dizzle() {
 }
 
-Dizzle.error = ( msg ) => {
+Dizzle.err = ( msg ) => {
 	throw new Error( msg );
 };
 
@@ -14,7 +11,6 @@ Dizzle.log = function() {
 	console.groupEnd();
 };
 
-Dizzle.parse = parse;
-Dizzle.find  = engine;
 const core = Dizzle;
+
 export default core;

@@ -8,16 +8,17 @@ import pseudo from "./selector/pseudo";
 
 const defaultDom = doc;
 
-function find( selectors, dom ) {
+function find( selectors, context ) {
 	let results = '';
 	selectors.forEach( selector => {
 		selector.forEach( single => {
 			if( isString( single ) ) {
-				results = query( single, results, dom );
+				results = query( single, results, context );
 			} else {
-				if( 'attribute' === single.type ) {
+				let { type } = single;
+				if( 'attr' === type ) {
 					results = attribute( single, results );
-				} else if( 'pseudo' === single.type ) {
+				} else if( 'pseudo' === type ) {
 					results = pseudo( single, results );
 				}
 			}

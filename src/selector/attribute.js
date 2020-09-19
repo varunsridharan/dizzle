@@ -6,7 +6,7 @@ export default function( data, contxt ) {
 		let value = elem.getAttribute( data.name );
 		switch( data.action ) {
 			case '!':
-				return ( data.value !== value );
+				return ( data.val !== value );
 			break;
 		}
 	} );

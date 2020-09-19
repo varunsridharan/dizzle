@@ -1,3 +1,3 @@
-export var Traversals              = [ '>', '<', '~', '+' ];
+export var Traversals                = [ '>', '<', '~', '+' ];
 export var BrowserSupportedOperators = [ '=' ];
-export var BrowserSupportedPseudo  = [ 'first-child' ];
+export var BrowserSupportedPseudo    = [ 'first-child' ];
