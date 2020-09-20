@@ -1,9 +1,8 @@
 import { reAttr, reEscape, reName } from "../regex";
 import core from "../core";
-import isString from "../typechecking/isString";
-import isPlainObject from "../typechecking/isPlainObject";
 import { Traversals } from "../vars";
 import { createCache } from "../helper";
+import { parseCache } from "../cache";
 
 const attribSelectors        = {
 		  '#': [ 'id', 'equals' ],
@@ -13,7 +12,6 @@ const attribSelectors        = {
 	  stripQuotesFromPseudos = new Set( [ 'contains', 'icontains' ] ),
 	  quotes                 = new Set( [ '"', '\'' ] );
 const fcc                    = String.fromCharCode;
-const parseCache             = createCache();
 
 // Unescape function taken from https://github.com/jquery/sizzle/blob/master/src/sizzle.js#L152
 function funescape( _, escaped, escapedWhitespace ) {
@@ -205,7 +203,7 @@ export default function parse( selector ) {
 	if( cached ) {
 		return cached;
 	}
-	cached = selector;
+	cached           = selector;
 	const subselects = [];
 	selector         = parseSelector( subselects, `${selector}` );
 	if( selector !== '' ) {

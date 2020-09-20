@@ -1,13 +1,10 @@
-import parse from "../parser/parse";
-import { stringifyToken } from "../parser/stringify";
-import isString from "../typechecking/isString";
-import isPlainObject from "../typechecking/isPlainObject";
-import { BrowserSupportedPseudo, BrowserSupportedOperators, Traversals } from "../vars";
-import core from "../core";
-import isUndefined from "../typechecking/isUndefined";
-import { createCache } from "../helper";
+import parse from "./parser/parse";
+import { stringifyToken } from "./parser/stringify";
+import isString from "./typechecking/isString";
+import isPlainObject from "./typechecking/isPlainObject";
+import { BrowserSupportedOperators, Traversals } from "./vars";
+import { Tokenizedcache } from "./cache";
 
-const Tokenizedcache = createCache();
 
 /**
  * Converts CSS Pasred Object into queryable Data.
@@ -16,7 +13,8 @@ const Tokenizedcache = createCache();
  */
 export default function( selector ) {
 	let cached = Tokenizedcache( selector );
-	if( !isUndefined( cached ) ) {
+
+	if( cached ) {
 		return cached;
 	}
 	cached     = selector;
@@ -36,7 +34,10 @@ export default function( selector ) {
 
 		tokens.map( token => {
 			let { type, id, action } = token;
-			if( 'tag' === type ) {
+
+			if( '*' === type ) {
+				store( '*' );
+			} else if( 'tag' === type ) {
 				store( id );
 			} else if( 'descendant' === type ) {
 				store( ' ' );
