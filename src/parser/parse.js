@@ -1,6 +1,6 @@
-import { reAttr, reEscape, reName } from "../regex";
+import { reAttr, reName } from "../regex";
 import core from "../core";
-import { Traversals } from "../vars";
+import { CombinatorTypes } from "../vars";
 import { parseCache } from "../cache";
 
 const attribSelectors        = {
@@ -61,8 +61,8 @@ function parseSelector( subselects, selector ) {
 		if( isWhitespace( firstChar ) ) {
 			sawWS = true;
 			stripWhitespace( 1 );
-		} else if( Traversals.indexOf( firstChar ) >= 0 ) {
-			tokens.push( { type: firstChar } );
+		} else if( CombinatorTypes.indexOf( firstChar ) >= 0 ) {
+			tokens.push( { type: 'combinators', action: firstChar } );
 			sawWS = false;
 			stripWhitespace( 1 );
 		} else if( firstChar === ',' ) {
