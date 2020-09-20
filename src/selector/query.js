@@ -40,7 +40,16 @@ export function nativeQuery( selector, context ) {
 			}
 		}
 	}
+	results = queryAll( selector, context );
+	if( false === results ) {
+		nonNativeSelector( selector, true );
+		return false;
+	}
+	return results;
+}
 
+export function queryAll( selector, context ) {
+	let results = [];
 	/**
 	 * Try To Use Native QuerySelector All To Find Elements For The Provided Query
 	 */
@@ -49,17 +58,16 @@ export function nativeQuery( selector, context ) {
 		return results;
 	} catch( e ) {
 	}
-
-	nonNativeSelector( selector, true );
 	return false;
 }
 
 export default function( selector, existingResults, contxt ) {
 	if( '' !== existingResults ) {
 		let results = [];
-		existingResults.forEach( elm => elm.querySelectorAll( selector )
-										   .forEach( ( queryElem ) => results.push( queryElem ) ) );
+		existingResults.forEach( elm => {
+			_push.apply( results, nativeQuery( selector, elm ) );
+		} );
 		return results;
 	}
-	return contxt.querySelectorAll( selector );
+	return nativeQuery( selector, contxt );
 }
