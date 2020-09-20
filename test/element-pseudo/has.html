@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>has demo</title>
+	<style>
+		.test {
+			border: 3px inset red;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<div><p>Hello in a paragraph</p></div>
+<div>Hello again! (with no paragraph)</div>
+
+<script>
+	$( dizzle( 'div:has(p)' ) ).addClass( "test" );
+</script>
+
+</body>
+</html>

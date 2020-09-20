@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>attributeHas demo</title>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<div>no id</div>
+<div id="hey">with id</div>
+<div id="there">has an id</div>
+<div>nope</div>
+
+<script>
+	// Using .one() so the handler is executed at most once
+	// per element per event type
+	$( dizzle( 'div[id]' ) ).one( "click", function() {
+		var idString = $( this ).text() + " = " + $( this ).attr( "id" );
+		$( this ).text( idString );
+	} );
+</script>
+
+</body>
+</html>

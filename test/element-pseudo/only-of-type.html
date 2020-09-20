@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>only-of-type demo</title>
+	<style>
+		div {
+			width: 100px;
+			height: 80px;
+			margin: 5px;
+			float: left;
+			background: #b9e;
+		}
+
+		span {
+			padding: 2px;
+			margin: 3px;
+			line-height: 1.4;
+			border: 1px solid #000;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<div>
+	<button>Sibling!</button>
+	<button>Sibling!</button>
+</div>
+
+<div>
+	<button>Sibling!</button>
+</div>
+<div>
+	None
+</div>
+
+<div>
+	<button>Sibling!</button>
+	<span>Sibling!</span>
+	<span>Sibling!</span>
+</div>
+
+<div>
+	<button>Sibling!</button>
+</div>
+
+<script>
+	$( dizzle( 'button:only-of-type' ) ).text( "Alone" ).css( "border", "2px blue solid" );
+</script>
+
+</body>
+</html>

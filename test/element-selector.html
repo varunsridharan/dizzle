@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>element demo</title>
+	<style>
+		div, span {
+			width: 60px;
+			height: 60px;
+			float: left;
+			padding: 10px;
+			margin: 10px;
+			background-color: #eee;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<div>DIV1</div>
+<div>DIV2</div>
+<span>SPAN</span>
+
+<script>
+	$( dizzle( 'div' ) ).css( "border", "9px solid red" );
+</script>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>disabled demo</title>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<form>
+	<input name="email" disabled="disabled">
+	<input name="id">
+</form>
+
+<script>
+	$( dizzle( 'input:disabled' ) ).val( "this is it" );
+</script>
+
+</body>
+</html>

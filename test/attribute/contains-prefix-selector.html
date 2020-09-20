@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>attributeContainsPrefix demo</title>
+	<style>
+		a {
+			display: inline-block;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<a href="example.html" hreflang="en">Some text</a>
+<a href="example.html" hreflang="en-UK">Some other text</a>
+<a href="example.html" hreflang="english">will not be outlined</a>
+
+<script>
+	$( dizzle( 'a[hreflang|=\'en\']' ) ).css( "border", "3px dotted green" );
+</script>
+
+</body>
+</html>

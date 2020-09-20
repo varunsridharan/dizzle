@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>nth-child demo</title>
+	<style>
+		div {
+			float: left;
+		}
+
+		span {
+			color: blue;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<div>
+	<ul>
+		<li>John</li>
+		<li>Karl</li>
+		<li>Brandon</li>
+	</ul>
+</div>
+<div>
+	<ul>
+		<li>Sam</li>
+	</ul>
+</div>
+<div>
+	<ul>
+		<li>Glen</li>
+		<li>Tane</li>
+		<li>Ralph</li>
+		<li>David</li>
+	</ul>
+</div>
+
+<script>
+	$( dizzle( 'ul li:nth-child(2)' ) ).append( "<span> - 2nd!</span>" );
+</script>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>visible demo</title>
+	<style>
+		div {
+			width: 50px;
+			height: 40px;
+			margin: 5px;
+			border: 3px outset green;
+			float: left;
+		}
+
+		.starthidden {
+			display: none;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<button>Show hidden to see they don't change</button>
+<div></div>
+<div class="starthidden"></div>
+<div></div>
+<div></div>
+<div style="display:none;"></div>
+
+<script>
+	$( dizzle( 'div:visible' ) ).click( function() {
+		$( this ).css( "background", "yellow" );
+	} );
+	$( "button" ).click( function() {
+		$( "div:hidden" ).show( "fast" );
+	} );
+</script>
+
+</body>
+</html>

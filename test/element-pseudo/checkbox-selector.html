@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>checkbox demo</title>
+	<style>
+		textarea {
+			height: 25px;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<form>
+	<input type="button" value="Input Button">
+	<input type="checkbox">
+
+	<input type="checkbox">
+	<input type="file">
+	<input type="hidden">
+
+	<input type="image">
+	<input type="password">
+	<input type="radio">
+
+	<input type="reset">
+	<input type="submit">
+	<input type="text">
+
+	<select>
+		<option>Option</option>
+	</select>
+
+	<textarea></textarea>
+	<button>Button</button>
+</form>
+
+<div></div>
+
+<script>
+	var input = $( dizzle( 'form input:checkbox' ) )
+		.wrap( "<span></span>" )
+		.parent()
+		.css( {
+			background: "yellow",
+			border: "3px red solid"
+		} );
+
+	$( "div" )
+		.text( "For this type PickledVanilla found " + input.length + "." )
+		.css( "color", "red" );
+
+	// Prevent the form from submitting
+	$( "form" ).submit( function( event ) {
+		event.preventDefault();
+	} );
+</script>
+
+</body>
+</html>

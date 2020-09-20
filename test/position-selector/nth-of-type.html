@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>nth-of-type demo</title>
+	<style>
+		.nth {
+			color: red;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<div>
+	<span>John</span>,
+	<b>Kim</b>,
+	<span>Adam</span>,
+	<b>Rafael</b>,
+	<span>Oleg</span>
+</div>
+<div>
+	<b>Dave</b>,
+	<span>Ann</span>
+</div>
+<div>
+	<i><span>Maurice</span></i>,
+	<span>Richard</span>,
+	<span>Ralph</span>,
+	<span>Jason</span>
+</div>
+
+<script>
+	$( dizzle( 'span:nth-of-type(2)' ) )
+		.append( "<span> is 2nd sibling span</span>" )
+		.addClass( "nth" );
+</script>
+
+</body>
+</html>

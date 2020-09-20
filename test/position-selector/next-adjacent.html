@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>next adjacent demo</title>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<form>
+	<label for="name">Name:</label>
+	<input name="name" id="name">
+	<fieldset>
+		<label for="newsletter">Newsletter:</label>
+		<input name="newsletter" id="newsletter">
+	</fieldset>
+</form>
+<input name="none">
+
+<script>
+	$( dizzle( 'label + input' ) ).css( "color", "blue" ).val( "Labeled!" );
+</script>
+
+</body>
+</html>

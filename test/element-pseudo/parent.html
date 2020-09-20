@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>parent demo</title>
+	<style>
+		td {
+			width: 40px;
+			background: green;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<table border="1">
+	<tr>
+		<td>Value 1</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td>Value 2</td>
+		<td></td>
+	</tr>
+</table>
+
+<script>
+	$( dizzle( 'td:parent' ) ).fadeTo( 1500, 0.3 );
+</script>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>root demo</title>
+	<style>
+		span.fot {
+			color: red;
+			font-size: 120%;
+			font-style: italic;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<div id="log">The root of this document is:</div>
+
+<script>
+	alert( 'Check Code' );
+	$( "<b></b>" ).html( $( ":root" )[ 0 ].nodeName ).appendTo( "#log" );
+</script>
+
+</body>
+</html>

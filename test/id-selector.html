@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>id demo</title>
+	<style>
+		div {
+			height: 90px;
+			float: left;
+			padding: 5px;
+			margin: 5px;
+			background-color: #eee;
+			width: 300px;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<div id="notMe"><p>id="notMe"</p></div>
+<div id="myDiv">id="myDiv"</div>
+
+<div id="myID.entry[0]">id="myID.entry[0]"</div>
+<div id="myID.entry[1]">id="myID.entry[1]"</div>
+<div id="myID.entry[2]">id="myID.entry[2]"</div>
+<script>
+	$( dizzle( '#myDiv' ) ).css( "border", "3px solid red" );
+	$( dizzle( "#myID\\.entry\\[1\\]" ) ).css( "border", "3px solid red" );
+</script>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>descendant demo</title>
+	<style>
+		form {
+			border: 2px green solid;
+			padding: 2px;
+			margin: 0;
+			background: #efe;
+		}
+
+		div {
+			color: red;
+		}
+
+		fieldset {
+			margin: 1px;
+			padding: 3px;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<form>
+	<div>Form is surrounded by the green border.</div>
+
+	<label for="name">Child of form:</label>
+	<input name="name" id="name">
+
+	<fieldset>
+		<label for="newsletter">Grandchild of form, child of fieldset:</label>
+		<input name="newsletter" id="newsletter">
+	</fieldset>
+</form>
+Sibling to form: <input name="none">
+
+<script>
+	$( dizzle( "form input" ) ).css( "border", "2px dotted blue" );
+	$( dizzle( "form fieldset input" ) ).css( "backgroundColor", "yellow" );
+</script>
+
+</body>
+</html>

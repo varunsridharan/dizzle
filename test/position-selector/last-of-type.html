@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>last-of-type demo</title>
+	<style>
+		span.solast {
+			text-decoration: line-through;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<div>
+	<span>Corey,</span>
+	<span>Yehuda,</span>
+	<span>Adam,</span>
+	<span>Todd</span>
+</div>
+<div>
+	<span>Jörn,</span>
+	<span>Scott,</span>
+	<span>Timo,</span>
+	<b>Nobody</b>
+</div>
+
+<script>
+	$( dizzle( 'span:last-of-type' ) ).css( { color: "red", fontSize: "80%" } );
+	/*.hover(function() {
+		$( this ).addClass( "solast" );
+	}, function() {
+		$( this ).removeClass( "solast" );
+	});*/
+</script>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>only-child demo</title>
+	<style>
+		div {
+			width: 100px;
+			height: 80px;
+			margin: 5px;
+			float: left;
+			background: #b9e;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<div>
+	<button>Sibling!</button>
+	<button>Sibling!</button>
+</div>
+
+<div>
+	<button>Sibling!</button>
+</div>
+
+<div>
+	None
+</div>
+
+<div>
+	<button>Sibling!</button>
+	<button>Sibling!</button>
+	<button>Sibling!</button>
+</div>
+
+<div>
+	<button>Sibling!</button>
+</div>
+
+<script>
+	$( dizzle( 'div button:only-child' ) ).text( "Alone" ).css( "border", "2px blue solid" );
+</script>
+
+</body>
+</html>

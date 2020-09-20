@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>child demo</title>
+	<style>
+		body {
+			font-size: 14px;
+		}
+	</style>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<ul class="topnav">
+	<li>Item 1</li>
+	<li>Item 2
+		<ul>
+			<li>Nested item 1</li>
+			<li>Nested item 2</li>
+			<li>Nested item 3</li>
+		</ul>
+	</li>
+	<li>Item 3</li>
+</ul>
+
+<script>
+	$( dizzle( 'ul.topnav > li' ) ).css( "border", "3px double red" );
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>attributeStartsWith demo</title>
+	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+</head>
+<body>
+
+<input name="newsletter">
+<input name="milkman">
+<input name="newsboy">
+
+<script>
+	$( dizzle( "input[name^='news']" ) ).val( "news here!" );
+</script>
+
+</body>
+</html>
