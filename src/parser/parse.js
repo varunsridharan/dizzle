@@ -1,7 +1,6 @@
 import { reAttr, reEscape, reName } from "../regex";
 import core from "../core";
 import { Traversals } from "../vars";
-import { createCache } from "../helper";
 import { parseCache } from "../cache";
 
 const attribSelectors        = {
@@ -11,18 +10,6 @@ const attribSelectors        = {
 	  unpackPseudos          = new Set( [ 'has', 'not', 'matches', 'is' ] ),
 	  stripQuotesFromPseudos = new Set( [ 'contains', 'icontains' ] ),
 	  quotes                 = new Set( [ '"', '\'' ] );
-const fcc                    = String.fromCharCode;
-
-// Unescape function taken from https://github.com/jquery/sizzle/blob/master/src/sizzle.js#L152
-function funescape( _, escaped, escapedWhitespace ) {
-	const high = parseInt( escaped, 16 ) - 0x10000;
-	return high !== high || escapedWhitespace ? escaped : high < 0 ? fcc( high + 0x10000 ) : fcc( ( high >> 10 ) | 0xd800, ( high & 0x3ff ) | 0xdc00 );
-}
-
-function unescapeCSS2( str ) {
-	return str.replace( reEscape, funescape );
-}
-
 
 function unescapeCSS( str ) {
 	return str.replace( /\\(?:([0-9a-f]{1,6} ?)|(.))/ig, ( match, hex, char ) => {
