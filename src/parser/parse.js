@@ -4,7 +4,7 @@ import { CombinatorTypes } from "../vars";
 import { parseCache } from "../cache";
 
 const attribSelectors        = {
-		  '#': [ 'id', 'equals' ],
+		  '#': [ 'id', '=' ],
 		  '.': [ 'class', 'element' ],
 	  },
 	  unpackPseudos          = new Set( [ 'has', 'not', 'matches', 'is' ] ),
