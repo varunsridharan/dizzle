@@ -4,7 +4,7 @@ export const reName          = /^[^\\]?(?:\\(?:[\da-f]{1,6}\s?|.)|[\w\-\u00b0-\u
 			 reAttr          = /^\s*((?:\\.|[\w\u00b0-\uFFFF-])+)\s*(?:(\S?)=\s*(?:(['"])([^]*?)\3|(#?(?:\\.|[\w\u00b0-\uFFFF-])*)|)|)\s*(i)?\]/,
 			 // Easily-parseable/retrievable ID or TAG or CLASS selectors
 			 rquickExpr      = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/,
-			 whitespace      = "[\\x20\\t\\r\\n\\f]",
-			 rwhitespace     = new RegExp( whitespace + "+", "g" ),
+			 whitespace      = '[\\x20\\t\\r\\n\\f]',
+			 rwhitespace     = new RegExp( whitespace + '+', 'g' ),
 			 // Below Regex is used to find any issues with string such as using / or \ - _ (Any Special Char Thats Needs To Be Escaped)
 			 rfindEscapeChar = /[-[\]{}()*+?.,\\^$|#\s]/g;
