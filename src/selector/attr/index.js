@@ -6,6 +6,7 @@ import contains from "./contains";
 import containsword from "./containsword";
 import endswith from "./endswith";
 import startswith from "./startswith";
+import elementClass from "./elementClass";
 
 export const attrHandlers = {
 	'=': equals,
@@ -15,6 +16,12 @@ export const attrHandlers = {
 	'~': containsword,
 	'$': endswith,
 	'^': startswith,
+	/**
+	 * The below function is used only to check for element class
+	 * when query is used like
+	 * .myclass1.myclass2 / .myclass .anotherelement
+	 */
+	'element': elementClass
 };
 export default function( el, token ) {
 	let status              = true;
