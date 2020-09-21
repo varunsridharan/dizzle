@@ -61,7 +61,7 @@ export function queryAll( selector, context ) {
 	return false;
 }
 
-export default function( selector, existingResults, contxt ) {
+export default function( selector, existingResults, context ) {
 	if( '' !== existingResults ) {
 		let results = [];
 		existingResults.forEach( elm => {
@@ -69,5 +69,5 @@ export default function( selector, existingResults, contxt ) {
 		} );
 		return results;
 	}
-	return nativeQuery( selector, contxt );
+	return nativeQuery( selector, context );
 }
