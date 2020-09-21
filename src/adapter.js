@@ -1,5 +1,5 @@
 export default {
-	attr: function( key ) {
-		return this.getAttribute( key );
+	attr: function( el, key ) {
+		return el.getAttribute( key );
 	}
 };
