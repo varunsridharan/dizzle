@@ -26,12 +26,10 @@ export const attrHandlers = {
 export default function( el, token ) {
 	let status              = true;
 	let { action, id, val } = token;
-	let currentValue        = adapter.attr.call( el, id );
-
+	let currentValue        = adapter.attr( el, id );
 	if( currentValue === null ) {
 		return action === '!';
 	}
-
 	if( token.action in attrHandlers ) {
 		status = attrHandlers[ action ]( currentValue, val );
 	}
