@@ -22,12 +22,19 @@ function nextToken( currentPos, tokens ) {
 	return { token: false, pos: currentPos };
 }
 
+function validateToken( tokens ) {
+	return ( 'tag' === tokens[ 0 ].type || 'attr' === tokens[ 0 ].type && ( 'id' === tokens[ 0 ].id || 'class' === tokens[ 0 ].id ) ) ? tokens : [ { type: 'descendant' }, ...tokens ];
+}
+
 export function findAdvanced( selectors, root ) {
 	selectors = ( isString( selectors ) ) ? parse( selectors ) : selectors;
+	root      = ( !_isArray( root ) ) ? [ root ] : root;
 	return selectors.reduce( ( results, tokens ) => {
+		tokens = validateToken( tokens );
+
 		let i       = 0,
 			len     = tokens.length,
-			context = ( !_isArray( root ) ) ? [ root ] : root;
+			context = root;
 		while( i < len ) {
 			let token               = tokens[ i++ ], newToken,
 				combinator_callback = combinators[ ' ' ];
@@ -55,6 +62,9 @@ export function findAdvanced( selectors, root ) {
 					}
 					break;
 				case 'pseudo':
+					if( context === root ) {
+						context = context.reduce( ( nodes, el ) => combinator_callback( `*`, el, nodes, false ), [] );
+					}
 					context = pesudoHandler( context, token );
 					break;
 			}
@@ -85,7 +95,6 @@ export default function( selector, context ) {
 	}
 
 	context = context || currentDocument;
-
-	results = nativeQuery( selector, context );
+	results = false;//nativeQuery( selector, context );
 	return ( false !== results ) ? results : findAdvanced( selector, context );
 }
