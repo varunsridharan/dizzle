@@ -1,4 +1,4 @@
-import { reAttr, reName } from "../regex";
+import { reAttr, reEscape, reName } from "../regex";
 import core from "../core";
 import { CombinatorTypes } from "../vars";
 import { parseCache } from "../cache";
@@ -11,13 +11,19 @@ const attribSelectors        = {
 	  stripQuotesFromPseudos = new Set( [ 'contains', 'icontains' ] ),
 	  quotes                 = new Set( [ '"', '\'' ] );
 
+
+/**
+ * Below Regex Is Used To Escape CSS Selector such as
+ * #myID.entry[1] -->  #myID\\.entry\\[1\\]
+ * @type {RegExp}
+ */
+function funescape( escaped, escapedWhitespace ) {
+	const high = parseInt( escaped, 16 ) - 0x10000;
+	return high !== high || escapedWhitespace ? escaped : high < 0 ? String.fromCharCode( high + 0x10000 ) : String.fromCharCode( ( high >> 10 ) | 0xd800, ( high & 0x3ff ) | 0xdc00 );
+}
+
 function unescapeCSS( str ) {
-	return str.replace( /\\(?:([0-9a-f]{1,6} ?)|(.))/ig, ( match, hex, char ) => {
-		if( hex ) {
-			return String.fromCharCode( parseInt( hex, 16 ) );
-		}
-		return char;
-	} );
+	return str.replace( reEscape, funescape );
 }
 
 function isWhitespace( c ) {
