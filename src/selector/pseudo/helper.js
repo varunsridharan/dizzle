@@ -3,15 +3,23 @@ import { markFunction } from "../../helper";
 export function createPositionalPseudo( fn ) {
 	return markFunction( ( elements, token ) => {
 		token.data       = +token.data;
-		let results      = fn( [], elements.length, token );
-		let currentIndex = results.shift();
-		// Match elements found at the specified indexes
-		return elements.filter( ( el, index ) => {
-			if( currentIndex === index ) {
-				currentIndex = results.shift();
-				return true;
+		var j, matches   = [],
+			matchIndexes = fn( [], elements.length, token ),
+			i            = matchIndexes.length;
+
+		while( i-- ) {
+			if( elements[ ( j = matchIndexes[ i ] ) ] ) {
+				elements[ j ] = !( matches[ j ] = elements[ j ] );
 			}
-			return false;
-		} );
+		}
+		return matches;
 	} );
+}
+
+export function oddOrEven( isodd, result, totalFound ) {
+	var i = ( isodd ) ? 1 : 0;
+	for( ; i < totalFound; i += 2 ) {
+		result.push( i );
+	}
+	return result;
 }

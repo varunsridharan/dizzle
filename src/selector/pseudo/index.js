@@ -10,34 +10,32 @@ import visible from "./visible";
 import hidden from "./hidden";
 import contains from "./contains";
 import eq from "./eq";
+import firstChild from "./first-child";
+import lastChild from "./last-child";
 import first from "./first";
 import last from "./last";
+import odd from "./odd";
+import gt from "./gt";
+import lt from "./lt";
 
 export const pesudoHandlers = {
 	'empty': empty,
 	'disabled': disabled,
 	'enabled': enabled,
 	'even': createPositionalPseudo( even ),
+	'odd': createPositionalPseudo( odd ),
+	'gt': createPositionalPseudo( gt ),
+	'lt': createPositionalPseudo( lt ),
 	'lang': lang,
 	'visible': visible,
 	'hidden': hidden,
 	'contains': contains,
 	'eq': createPositionalPseudo( eq ),
-	'first': first,
-	'last': last
+	'first-child': firstChild,
+	'last-child': lastChild,
+	'first': createPositionalPseudo( first ),
+	'last': createPositionalPseudo( last ),
 };
-
-/**
- * Custom Alias.
- */
-pesudoHandlers[ 'first-child' ] = pesudoHandlers.first;
-
-/**
- *
- * @param el
- * @param token
- * @return {boolean|*}
- */
 
 export default function pesudoHandler( el, token ) {
 	if( _isArray( el ) ) {
