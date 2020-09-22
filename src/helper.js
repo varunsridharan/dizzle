@@ -1,5 +1,6 @@
 import core from "./core";
 import win from "./vars/win";
+import isFunction from "./typechecking/isFunction";
 
 export const preferedDocument = win.document;
 export var currentDocument    = preferedDocument,
@@ -11,5 +12,5 @@ export function markFunction( fn ) {
 }
 
 export function isMarkedFunction( fn ) {
-	return ( fn[ core.instanceID ] && fn[ core.instanceID ] === true );
+	return ( isFunction( fn ) && fn[ core.instanceID ] && fn[ core.instanceID ] === true );
 }
