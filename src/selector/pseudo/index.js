@@ -4,21 +4,26 @@ import enabled from "./enabled";
 import _isArray from "../../vars/_isArray";
 import even from "./even";
 import { createPositionalPseudo } from "./helper";
+import lang from "./lang";
+import { isMarkedFunction } from "../../helper";
 
 export const pesudoHandlers = {
 	'empty': empty,
 	'disabled': disabled,
 	'enabled': enabled,
 	'even': createPositionalPseudo( even ),
+	'lang': lang,
 };
 
 export default function pesudoHandler( el, token ) {
 	if( _isArray( el ) ) {
 		let { id } = token;
-		console.log(token);
 		if( id in pesudoHandlers ) {
-			console.log(pesudoHandlers[ id ]);
-			el = pesudoHandlers[ id ]( el );
+			if( isMarkedFunction( pesudoHandlers[ id ] ) ) {
+				el = pesudoHandlers[ id ]( el, token );
+			} else {
+				el = el.filter( e => pesudoHandlers[ id ]( e, token ) );
+			}
 		}
 		return el;
 	} else {
@@ -26,7 +31,7 @@ export default function pesudoHandler( el, token ) {
 		let { id } = token;
 
 		if( id in pesudoHandlers ) {
-			status = pesudoHandlers[ id ]( el );
+			status = pesudoHandlers[ id ]( el, token );
 		}
 		return status;
 	}
