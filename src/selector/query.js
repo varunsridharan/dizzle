@@ -1,6 +1,8 @@
 import { rquickExpr } from "../regex";
 import _push from "../vars/_push";
 import { nonNativeSelector } from "../cache";
+import isFunction from "../typechecking/isFunction";
+import isUndefined from "../typechecking/isUndefined";
 
 /**
  * Tries To Run Native Query Selectors.
@@ -50,11 +52,20 @@ export function nativeQuery( selector, context ) {
 
 export function queryAll( selector, context ) {
 	let results = [];
+
 	/**
 	 * Try To Use Native QuerySelector All To Find Elements For The Provided Query
 	 */
 	try {
-		_push.apply( results, context.querySelectorAll( selector ) );
+		let scope = context;
+		if( !isFunction( context.querySelectorAll ) ) {
+			if( !isUndefined( context.document ) && isFunction( context.document.querySelectorAll ) ) {
+				scope = context.document;
+			} else if( !isUndefined( context.documentElement ) && isFunction( context.documentElement.querySelectorAll ) ) {
+				scope = context.documentElement;
+			}
+		}
+		_push.apply( results, scope.querySelectorAll( selector ) );
 		return results;
 	} catch( e ) {
 	}
