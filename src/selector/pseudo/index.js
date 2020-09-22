@@ -10,6 +10,8 @@ import visible from "./visible";
 import hidden from "./hidden";
 import contains from "./contains";
 import eq from "./eq";
+import first from "./first";
+import last from "./last";
 
 export const pesudoHandlers = {
 	'empty': empty,
@@ -20,8 +22,22 @@ export const pesudoHandlers = {
 	'visible': visible,
 	'hidden': hidden,
 	'contains': contains,
-	'eq': createPositionalPseudo( eq )
+	'eq': createPositionalPseudo( eq ),
+	'first': first,
+	'last': last
 };
+
+/**
+ * Custom Alias.
+ */
+pesudoHandlers[ 'first-child' ] = pesudoHandlers.first;
+
+/**
+ *
+ * @param el
+ * @param token
+ * @return {boolean|*}
+ */
 
 export default function pesudoHandler( el, token ) {
 	if( _isArray( el ) ) {
