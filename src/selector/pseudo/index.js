@@ -6,6 +6,8 @@ import even from "./even";
 import { createPositionalPseudo } from "./helper";
 import lang from "./lang";
 import { isMarkedFunction } from "../../helper";
+import visible from "./visible";
+import hidden from "./hidden";
 
 export const pesudoHandlers = {
 	'empty': empty,
@@ -13,6 +15,8 @@ export const pesudoHandlers = {
 	'enabled': enabled,
 	'even': createPositionalPseudo( even ),
 	'lang': lang,
+	'visible': visible,
+	'hidden': hidden
 };
 
 export default function pesudoHandler( el, token ) {
@@ -37,4 +41,3 @@ export default function pesudoHandler( el, token ) {
 	}
 
 }
-
