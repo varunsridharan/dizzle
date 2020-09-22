@@ -14,7 +14,7 @@ function nextToken( currentPos, tokens ) {
 			if( !isMarkedFunction( pesudoHandlers[ tokens[ currentPos ].id ] ) ) {
 				return { token: tokens[ currentPos++ ], pos: currentPos };
 			}
-		} else if( tokens[ currentPos ].type !== 'combinators' ) {
+		} else if( tokens[ currentPos ].type !== 'combinators' && tokens[ currentPos ].type !== 'descendant' ) {
 			return { token: tokens[ currentPos++ ], pos: currentPos };
 		}
 	}
@@ -37,12 +37,19 @@ export function findAdvanced( selectors, root ) {
 			context = root;
 		while( i < len ) {
 			let token               = tokens[ i++ ], newToken,
-				combinator_callback = combinators[ ' ' ];
+				combinator_callback = combinators[ ' ' ],
+				/**
+				 * having selectors like `body :hidden` is not working since pseudo works only for elements array
+				 * so had to modify the code know if we found any sort of combinators.
+				 */
+				combinators_found   = false;
 
-			if( token.type === 'combinators' && token.action in combinators ) {
+			if( ( token.type === 'combinators' || token.type === 'descendant' ) && token.action in combinators ) {
 				combinator_callback = combinators[ token.action ];
+				combinators_found   = true;
 				token               = tokens[ i++ ];
 			}
+
 			let { type, id } = token;
 
 			switch( type ) {
@@ -62,7 +69,7 @@ export function findAdvanced( selectors, root ) {
 					}
 					break;
 				case 'pseudo':
-					if( context === root ) {
+					if( context === root || combinators_found ) {
 						context = context.reduce( ( nodes, el ) => combinator_callback( `*`, el, nodes, false ), [] );
 					}
 					context = pesudoHandler( context, token );
