@@ -9,3 +9,5 @@ export default function matches( el, selector ) {
 export function setupMatcherFn() {
 	matcherFn = [ 'matches', 'webkitMatchesSelector', 'msMatchesSelector' ].reduce( ( fn, name ) => ( fn ) ? fn : name in docElem ? name : fn, null );
 }
+
+setupMatcherFn();
