@@ -14,31 +14,38 @@ import firstChild from "./first-child";
 import lastChild from "./last-child";
 import firstOfType from "./first-of-type";
 import lastOfType from "./last-of-type";
+import nthOfType from "./nth-of-type";
 import first from "./first";
 import last from "./last";
 import odd from "./odd";
 import gt from "./gt";
 import lt from "./lt";
+import nthLastOfType from "./nth-last-of-type";
+import nthLastChild from "./nth-last-child";
+
 
 export const pesudoHandlers = {
 	'empty': empty,
 	'disabled': disabled,
 	'enabled': enabled,
-	'even': createPositionalPseudo( even ),
-	'odd': createPositionalPseudo( odd ),
-	'gt': createPositionalPseudo( gt ),
-	'lt': createPositionalPseudo( lt ),
-	'first-of-type': firstOfType,
-	'last-of-type': lastOfType,
 	'lang': lang,
 	'visible': visible,
 	'hidden': hidden,
 	'contains': contains,
-	'eq': createPositionalPseudo( eq ),
 	'first-child': firstChild,
 	'last-child': lastChild,
+	'first-of-type': firstOfType,
+	'last-of-type': lastOfType,
+	'even': createPositionalPseudo( even ),
+	'odd': createPositionalPseudo( odd ),
+	'gt': createPositionalPseudo( gt ),
+	'lt': createPositionalPseudo( lt ),
+	'eq': createPositionalPseudo( eq ),
 	'first': createPositionalPseudo( first ),
 	'last': createPositionalPseudo( last ),
+	'nth-of-type': nthOfType,
+	'nth-last-of-type': nthLastOfType,
+	'nth-last-child': nthLastChild,
 };
 
 export default function pesudoHandler( el, token ) {
