@@ -12,6 +12,8 @@ import contains from "./contains";
 import eq from "./eq";
 import firstChild from "./first-child";
 import lastChild from "./last-child";
+import firstOfType from "./first-of-type";
+import lastOfType from "./last-of-type";
 import first from "./first";
 import last from "./last";
 import odd from "./odd";
@@ -26,6 +28,8 @@ export const pesudoHandlers = {
 	'odd': createPositionalPseudo( odd ),
 	'gt': createPositionalPseudo( gt ),
 	'lt': createPositionalPseudo( lt ),
+	'first-of-type': firstOfType,
+	'last-of-type': lastOfType,
 	'lang': lang,
 	'visible': visible,
 	'hidden': hidden,
