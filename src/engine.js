@@ -1,4 +1,3 @@
-import doc from "./vars/doc";
 import isString from "./typechecking/isString";
 import combinators from "./selector/combinators/index";
 import attrHandler from "./selector/attr/index";
@@ -7,7 +6,7 @@ import _isArray from "./vars/_isArray";
 import isUndefined from "./typechecking/isUndefined";
 import { nativeQuery } from "./selector/query";
 import pesudoHandler, { pesudoHandlers } from "./selector/pseudo";
-import { isMarkedFunction } from "./helper";
+import { currentDocument, isMarkedFunction } from "./helper";
 
 function nextToken( currentPos, tokens ) {
 	if( !isUndefined( tokens[ currentPos ] ) ) {
@@ -69,7 +68,7 @@ export function findAdvanced( selectors, root ) {
 	}, [] );
 }
 
-export default function( selector, context = doc ) {
+export default function( selector, context ) {
 	/**
 	 * Node Types
 	 * 1  -- Element Node
@@ -85,15 +84,7 @@ export default function( selector, context = doc ) {
 		return results;
 	}
 
-	/**
-	 * Well this is a quick fix
-	 * this is just to make sure that this runs in iframe.
-	 * just comment it out and try with our built in speed test to replicate the issue.
-	 * @todo figureout who other libs such as Sizzle dose it.
-	 */
-	if( !context.querySelectorAll && context.documentElement.querySelectorAll ) {
-		context = context.documentElement;
-	}
+	context = context || currentDocument;
 
 	results = nativeQuery( selector, context );
 	return ( false !== results ) ? results : findAdvanced( selector, context );
