@@ -9,6 +9,7 @@ import { isMarkedFunction } from "../../helper";
 import visible from "./visible";
 import hidden from "./hidden";
 import contains from "./contains";
+import eq from "./eq";
 
 export const pesudoHandlers = {
 	'empty': empty,
@@ -18,7 +19,8 @@ export const pesudoHandlers = {
 	'lang': lang,
 	'visible': visible,
 	'hidden': hidden,
-	'contains': contains
+	'contains': contains,
+	'eq': createPositionalPseudo( eq )
 };
 
 export default function pesudoHandler( el, token ) {
