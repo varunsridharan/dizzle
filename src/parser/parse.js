@@ -82,7 +82,7 @@ function parseSelector( subselects, selector ) {
 		} else {
 			if( sawWS ) {
 				if( tokens.length > 0 ) {
-					tokens.push( { type: 'descendant' } );
+					tokens.push( { type: 'descendant', action: ' ' } );
 				}
 				sawWS = false;
 			}
