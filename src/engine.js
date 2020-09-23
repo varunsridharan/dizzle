@@ -7,6 +7,7 @@ import isUndefined from "./typechecking/isUndefined";
 import { nativeQuery } from "./selector/query";
 import pesudoHandler, { pesudoHandlers } from "./selector/pseudo";
 import { currentDocument, isMarkedFunction } from "./helper";
+import { selectorResultsCache } from "./cache";
 
 function nextToken( currentPos, tokens ) {
 	if( !isUndefined( tokens[ currentPos ] ) ) {
@@ -98,6 +99,11 @@ export default function( selector, context ) {
 	 */
 	let results  = false,
 		nodeType = context ? context.nodeType : 9;
+
+	if( isString( selector ) && ( results = selectorResultsCache( selector ) ) ) {
+		return results;
+	}
+
 	/**
 	 * Checks if selector var is a !string or !empty and also check for given contxt node type (1,9,11)
 	 */
@@ -111,5 +117,11 @@ export default function( selector, context ) {
 		results = nativeQuery( selector, context );
 	}
 
-	return ( false !== results ) ? results : findAdvanced( selector, context );
+	if( !results ) {
+		results = findAdvanced( selector, context );
+	}
+
+	selectorResultsCache( selector, results );
+
+	return results;
 }

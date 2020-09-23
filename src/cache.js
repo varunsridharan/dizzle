@@ -18,12 +18,6 @@ function createCache() {
 }
 
 /**
- * Stores All Tokenized Data In Cache
- * @type {cache}
- */
-export const Tokenizedcache = createCache();
-
-/**
  * Stores All Parsed Selector In Cache.
  * @type {cache}
  */
@@ -34,3 +28,9 @@ export const parseCache = createCache();
  * @type {cache}
  */
 export const nonNativeSelector = createCache();
+
+/**
+ * Stores All Selector's Results in Cache
+ * @type {cache}
+ */
+export const selectorResultsCache = createCache();
