@@ -1,5 +1,4 @@
-# Dizzle
-~ Simple Fast CSS Selector Engine ~
+![https://cdn.svarun.dev/gh/varunsridharan/dizzle/banner.jpg](https://cdn.svarun.dev/gh/varunsridharan/dizzle/banner.jpg)
 
 ## What?
 ___Dizzle___ turns CSS selectors into functions that tests if elements match them. When searching for elements, testing is executed "from the top", similar to how browsers execute CSS selectors.
