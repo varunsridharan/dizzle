@@ -30,8 +30,7 @@ export function findAdvanced( selectors, root ) {
 	selectors = ( isString( selectors ) ) ? parse( selectors ) : selectors;
 	root      = ( !_isArray( root ) ) ? [ root ] : root;
 	return selectors.reduce( ( results, tokens ) => {
-		tokens = validateToken( tokens );
-
+		tokens      = validateToken( tokens );
 		let i       = 0,
 			len     = tokens.length,
 			context = root;
@@ -53,6 +52,11 @@ export function findAdvanced( selectors, root ) {
 			let { type, id } = token;
 
 			switch( type ) {
+				case '*':
+					newToken = nextToken( i, tokens );
+					i        = newToken.pos;
+					context  = context.reduce( ( nodes, el ) => combinator_callback( '*', el, nodes, newToken.token ), [] );
+					break;
 				case 'tag':
 					newToken = nextToken( i, tokens );
 					i        = newToken.pos;
@@ -92,16 +96,20 @@ export default function( selector, context ) {
 	 * 9  -- Document Node (document)
 	 * 11 -- Document FRAGMENT
 	 */
-	let results  = [],
+	let results  = false,
 		nodeType = context ? context.nodeType : 9;
 	/**
 	 * Checks if selector var is a !string or !empty and also check for given contxt node type (1,9,11)
 	 */
-	if( !isString( selector ) || !selector || nodeType !== 1 && nodeType !== 9 && nodeType !== 11 ) {
+	if( !selector || nodeType !== 1 && nodeType !== 9 && nodeType !== 11 ) {
 		return results;
 	}
 
 	context = context || currentDocument;
-	results = false;//nativeQuery( selector, context );
+
+	if( isString( selector ) ) {
+		results = nativeQuery( selector, context );
+	}
+
 	return ( false !== results ) ? results : findAdvanced( selector, context );
 }
