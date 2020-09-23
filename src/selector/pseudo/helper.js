@@ -23,3 +23,22 @@ export function oddOrEven( isodd, result, totalFound ) {
 	}
 	return result;
 }
+
+/**
+ * Returns a function to use in pseudos for input types
+ * @param {String} type
+ */
+export function createInputPseudo( type ) {
+	return ( elem ) => elem.nodeName.toLowerCase() === 'input' && elem.type === type;
+}
+
+/**
+ * Returns a function to use in pseudos for buttons
+ * @param {String} type
+ */
+export function createButtonPseudo( type ) {
+	return function( elem ) {
+		var name = elem.nodeName.toLowerCase();
+		return ( name === 'input' || name === 'button' ) && elem.type === type;
+	};
+}

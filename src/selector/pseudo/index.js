@@ -3,7 +3,7 @@ import disabled from "./disabled";
 import enabled from "./enabled";
 import _isArray from "../../vars/_isArray";
 import even from "./even";
-import { createPositionalPseudo } from "./helper";
+import { createButtonPseudo, createInputPseudo, createPositionalPseudo } from "./helper";
 import lang from "./lang";
 import { isMarkedFunction } from "../../helper";
 import visible from "./visible";
@@ -22,6 +22,15 @@ import gt from "./gt";
 import lt from "./lt";
 import nthLastOfType from "./nth-last-of-type";
 import nthLastChild from "./nth-last-child";
+import checked from "./checked";
+import button from "./button";
+import input from "./input";
+import parent from "./parent";
+import selected from "./selected";
+import text from "./text";
+import onlyChild from "./only-child";
+import onlyOfType from "./only-of-type";
+import has from "./has";
 
 
 export const pesudoHandlers = {
@@ -46,7 +55,24 @@ export const pesudoHandlers = {
 	'nth-of-type': nthOfType,
 	'nth-last-of-type': nthLastOfType,
 	'nth-last-child': nthLastChild,
+	'checked': checked,
+	'input': input,
+	'button': button,
+	'parent': parent,
+	'selected': selected,
+	'text': text,
+	'only-child': onlyChild,
+	'only-of-type': onlyOfType,
+	'has': has
 };
+
+[ 'radio', 'checkbox', 'file', 'password', 'image' ].forEach( ( i ) => {
+	pesudoHandlers[ i ] = createInputPseudo( i );
+} );
+
+[ 'submit', 'reset' ].forEach( ( i ) => {
+	pesudoHandlers[ i ] = createButtonPseudo( i );
+} );
 
 export default function pesudoHandler( el, token ) {
 	if( _isArray( el ) ) {
