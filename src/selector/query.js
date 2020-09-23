@@ -71,14 +71,3 @@ export function queryAll( selector, context ) {
 	}
 	return false;
 }
-
-export default function( selector, existingResults, context ) {
-	if( '' !== existingResults ) {
-		let results = [];
-		existingResults.forEach( elm => {
-			_push.apply( results, nativeQuery( selector, elm ) );
-		} );
-		return results;
-	}
-	return nativeQuery( selector, context );
-}

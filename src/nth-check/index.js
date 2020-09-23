@@ -6,7 +6,7 @@
 	returns a function that checks if an elements index matches the given rule
 	highly optimized to return the fastest solution
 */
-export function compile( parsed ) {
+function compile( parsed ) {
 	var a = parsed[ 0 ],
 		b = parsed[ 1 ] - 1;
 
@@ -52,7 +52,7 @@ export function compile( parsed ) {
 	//following http://www.w3.org/TR/css3-selectors/#nth-child-pseudo
 	//[ ['-'|'+']? INTEGER? {N} [ S* ['-'|'+'] S* INTEGER ]?
 */
-export function parse( formula ) {
+function parse( formula ) {
 	formula = formula.trim().toLowerCase();
 
 	if( formula === 'even' ) {
