@@ -1,7 +1,6 @@
 import empty from "./empty";
 import disabled from "./disabled";
 import enabled from "./enabled";
-import _isArray from "../../vars/_isArray";
 import even from "./even";
 import { createButtonPseudo, createInputPseudo, createPositionalPseudo } from "./helper";
 import lang from "./lang";
@@ -31,6 +30,7 @@ import text from "./text";
 import onlyChild from "./only-child";
 import onlyOfType from "./only-of-type";
 import has from "./has";
+import { _isArray } from "@varunsridharan/js-vars";
 
 
 export const pesudoHandlers = {

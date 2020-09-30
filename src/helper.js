@@ -1,7 +1,7 @@
 import core from "./core";
-import win from "./vars/win";
 import isFunction from "./typechecking/isFunction";
 import isString from "./typechecking/isString";
+import {win} from "@varunsridharan/js-vars";
 
 export const preferedDocument = win.document;
 export var currentDocument    = preferedDocument,

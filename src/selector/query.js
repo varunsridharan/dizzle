@@ -1,8 +1,8 @@
 import { rquickExpr } from "../regex";
-import _push from "../vars/_push";
 import { nonNativeSelector } from "../cache";
 import isFunction from "../typechecking/isFunction";
 import isUndefined from "../typechecking/isUndefined";
+import { _push } from "@varunsridharan/js-vars";
 
 /**
  * Tries To Run Native Query Selectors.

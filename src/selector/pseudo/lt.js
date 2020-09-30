@@ -3,6 +3,5 @@ export default function( result, totalFound, token ) {
 	for( ; --i >= 0; ) {
 		result.push( i );
 	}
-	console.log( result);
 	return result;
 }
