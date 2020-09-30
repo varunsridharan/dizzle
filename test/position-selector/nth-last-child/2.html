@@ -32,7 +32,7 @@
 		}
 	</style>
 	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
-<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+	<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
 </head>
 <body>
 
@@ -97,7 +97,7 @@
 	$( "button" ).click( function() {
 		var str = $( this ).text();
 		$( "tr" ).css( "background", "white" );
-		$( dizzle( '"tr" + str' ) ).css( "background", "#ff0000" );
+		$( dizzle( `tr${str}` ) ).css( "background", "#ff0000" );
 		$( "#inner" ).text( str );
 	} );
 </script>

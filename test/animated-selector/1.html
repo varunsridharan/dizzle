@@ -18,7 +18,7 @@
 		}
 	</style>
 	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
-<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+	<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
 </head>
 <body>
 
@@ -26,7 +26,7 @@
 
 <div></div>
 <div id="mover"></div>
-<div></div>
+<div id="mover2"></div>
 
 <script>
 	$( "#run" ).click( function() {
@@ -34,10 +34,14 @@
 	} );
 
 	function animateIt() {
-		$( "#mover" ).slideToggle( "slow", animateIt );
+ 		$( "#mover2" ).fadeToggle( 1000, animateIt );
 	}
+	function animateIt2() {
+		$( "#mover" ).fadeToggle( 1000, animateIt2 );
+ 	}
 
 	animateIt();
+	animateIt2();
 </script>
 
 </body>

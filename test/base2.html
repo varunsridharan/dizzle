@@ -372,127 +372,31 @@
 </head>
 <body>
 
-<div class="head">
-	<h1><span class="modulename">Selectors</span></h1>
-	<h2>W3C Candidate Recommendation 13 November 2001</h2>
-	<dl>
-		<dt>This version:</dt>
-		<dd>
-			<a
-					href="http://www.w3.org/TR/2001/CR-css3-selectors-20011113"
-			>
-				http://www.w3.org/TR/2001/CR-css3-selectors-20011113</a
-			>
-		</dd>
-		<dt>Latest version:</dt>
-		<dd>
-			<a href="http://www.w3.org/TR/css3-selectors">
-				http://www.w3.org/TR/css3-selectors</a
-			>
-		</dd>
-		<dt>Previous version:</dt>
-		<dd>
-			<a
-					href="http://www.w3.org/TR/2001/WD-css3-selectors-20010126"
-			>
-				http://www.w3.org/TR/2001/WD-css3-selectors-20010126</a
-			>
-		</dd>
-		<dt><a name="editors-list"></a>Editors:</dt>
-		<dd>
-			<a href="mailto:glazman@netscape.com">Daniel Glazman</a>
-			(<span class="company"
-		><a href="http://www.netscape.com/"
-		>Netscape/AOL</a
-		></span
-		>)
-		</dd>
-		<dd>
-			<a href="mailto:tantekc@microsoft.com">Tantek Çelik</a>
-			(<span class="company"
-		><a href="http://www.microsoft.com/"
-		>Microsoft Corporation</a
-		></span
-		>)
-		</dd>
-		<dd><a href="mailto:ian@hixie.ch">Ian Hickson</a></dd>
-		<dd>
-			Peter Linss (former editor, formerly of&nbsp;<span
-				class="company"
-		><a href="http://www.netscape.com/"
-		>Netscape/AOL</a
-		></span
-		>)
-		</dd>
-		<dd>
-			John Williams (former editor,
-			<span class="company"
-			><a href="http://www.quark.com/">Quark, Inc.</a></span
-			>)
-		</dd>
-	</dl>
-	<p class="copyright" id="somename" data-iscopyrighted="yes">
-		<a
-				href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#Copyright"
-		>Copyright</a
-		>
-		©2001
-		<a href="http://www.w3.org/"
-		><abbr title="World Wide Web Consortium">W3C</abbr></a
-		><sup>®</sup> (<a href="http://www.lcs.mit.edu/"
-	><abbr title="Massachusetts Institute of Technology"
-	>MIT</abbr
-	></a
-	>,
-		<a href="http://www.inria.fr/"
-		><abbr
-				lang="fr"
-				title="Institut National de Recherche en Informatique et Automatique"
-		>INRIA</abbr
-		></a
-		>, <a href="http://www.keio.ac.jp/">Keio</a>), All Rights
-		Reserved. W3C
-		<a
-				href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#Legal_Disclaimer"
-		>liability</a
-		>,
-		<a
-				href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#W3C_Trademarks"
-		>trademark</a
-		>,
-		<a
-				href="http://www.w3.org/Consortium/Legal/copyright-documents-19990405"
-		>document use</a
-		>
-		and
-		<a
-				href="http://www.w3.org/Consortium/Legal/copyright-software-19980720"
-		>software licensing</a
-		>
-		rules apply.
-		<span id="data2">Data2</span>
-		<span id="data1">Data1</span>
-		<span id="data3">Data3</span>
-	</p>
-	<p data-iscopyrighted="no">
-		<span id="data4">Not There in data-iscopyrighted="yes"</span>
-	</p>
-	<hr title="Separator for header"/>
+<div id="parentDIV" style="padding:10px; margin:10px; border:1px solid red;">
+	<div class="childDIV1" style="padding:10px; margin:10px; border:1px solid blue;">
+		<h4>ChildDIV 1 Content</h4>
+	</div>
+
+	<div class="childDIV2" style="padding:10px; margin:10px; border:1px solid blue;">
+		<h4>ChildDIV 2 Content</h4>
+	</div>
+
+	<div class="childDIV3" style="padding:10px; margin:10px; border:1px solid blue;">
+		<h4>ChildDIV 3 Content</h4>
+	</div>
+
+	<div class="childDIV4" style="padding:10px; margin:10px; border:1px solid blue;">
+		<h4>ChildDIV 3 Content</h4>
+	</div>
 </div>
 
-<div class="body">
-	<h1>From Body Div.</h1>
-</div>
-
-<script src="../dist/dizzle.js"></script>
+<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
 <script>
-	//console.log( dizzle.parse( '#foo > .bar + div.k1.k2[id=\'baz\']:hello(2):not(:where(#yolo))::before' ) );
-	var selector = 'div.head p[data-iscopyrighted="yes"] span:last-child';
-	//console.log( dizzle.parse( selector ) );
-	console.time( 'Find' );
-	console.log( dizzle( 'div.head p[data-iscopyrighted!="yes"] span' ) );
-	console.timeEnd( 'Find' );
-	//console.log( dizzle.parse( '.head' ) );
+	$( dizzle.profile( function() {
+		return dizzle( '.childDIV3 < #parentDIV' )
+
+	} ) ).pulse( 1000, { loop: -1 } ).css( 'background', 'lightgreen' )
 </script>
 </body>
 </html>

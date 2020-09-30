@@ -23,7 +23,7 @@
 		}
 	</style>
 	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
-<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+	<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
 </head>
 <body>
 
@@ -46,10 +46,10 @@
 <script>
 	// In some browsers :hidden includes head, title, script, etc...
 	//var hiddenElements = $( "body" ).find( ":hidden" ).not( "script" );
-
-	$( "span" ).first().text( "Found " + dizzle( 'body :hidden:not(script)' ).length + " hidden elements total." );
-	$( dizzle( 'div:hidden' ) ).show( 3000 );
-	$( "span" ).last().text( "Found " + $( dizzle( 'input:hidden' ) ).length + " hidden inputs." );
+	console.log( dizzle( 'body :hidden:not(script)' ) );
+	//$( "span" ).first().text( "Found " + dizzle( 'body :hidden:not(script)' ).length + " hidden elements total." );
+	//$( dizzle( 'div:hidden' ) ).show( 3000 );
+	//$( "span" ).last().text( "Found " + $( dizzle( 'input:hidden' ) ).length + " hidden inputs." );
 </script>
 
 </body>

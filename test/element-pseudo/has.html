@@ -9,15 +9,22 @@
 		}
 	</style>
 	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
-<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+	<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
 </head>
 <body>
 
 <div><p>Hello in a paragraph</p></div>
+
+<div>
+	<p>Hello in a paragraph <span>WOW I am In Span</span></p>
+</div>
+
 <div>Hello again! (with no paragraph)</div>
 
 <script>
-	$( dizzle( 'div:has(p)' ) ).addClass( "test" );
+	$( dizzle.profile( function() {
+		return dizzle( 'div:has(p > span)' );
+	} ) ).addClass( "test" );
 </script>
 
 </body>
