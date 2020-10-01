@@ -5,8 +5,6 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c --watch",
-    "reload": "livereload 'build/'",
-    "watch": "npm-run-all --parallel reload dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "maintainers": [
