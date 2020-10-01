@@ -11,9 +11,6 @@ on:
       - main
     paths:
       - src/**
-    paths-ignore: 
-      - dist/*
-      - test/*
   schedule:
     - cron: '0 21 * * 3'
 
