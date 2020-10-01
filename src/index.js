@@ -8,6 +8,7 @@ import { setupMatcherFn } from "./selector/matcher";
 import is from "./is";
 import filter from "./filter";
 
+Dizzle.version     = '__VERSION__';
 Dizzle.parse       = parse;
 Dizzle.find        = engine;
 Dizzle.cacheLength = 50;

@@ -3,6 +3,12 @@ import nodeResolve from '@rollup/plugin-node-resolve';
 import { uglify } from 'rollup-plugin-uglify';
 import filesize from 'rollup-plugin-filesize';
 import visualizer from 'rollup-plugin-visualizer';
+import replace from "@rollup/plugin-replace";
+import pkg from "./package.json";
+
+const replaceVals = {
+	'__VERSION__': pkg.version,
+};
 
 export default {
 	input: './src/index.js',
@@ -27,6 +33,7 @@ export default {
 		}
 	],
 	plugins: [
+		replace( replaceVals ),
 		nodeResolve(),
 		babel(),
 		filesize(),

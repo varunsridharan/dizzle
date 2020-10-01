@@ -1348,6 +1348,7 @@
 	  return results;
 	}
 
+	Dizzle.version = '0.0.0';
 	Dizzle.parse = parse;
 	Dizzle.find = engine;
 	Dizzle.cacheLength = 50;
