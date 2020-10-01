@@ -1,10 +1,9 @@
-import core from "./core";
-import "./engine";
+import Dizzle from "./dizzle";
 import parse from "./parser/parse";
 import engine from "./engine";
 
-core.parse       = parse;
-core.find        = engine;
-core.cacheLength = 50;
+Dizzle.parse       = parse;
+Dizzle.find        = engine;
+Dizzle.cacheLength = 50;
 
-export default core;
+export default Dizzle;

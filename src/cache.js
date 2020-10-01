@@ -1,4 +1,4 @@
-import core from "./core";
+import Dizzle from "./dizzle";
 import { isUndefined } from "@varunsridharan/js-is";
 
 function createCache() {
@@ -8,7 +8,7 @@ function createCache() {
 		if( isUndefined( value ) ) {
 			return cache[ key + ' ' ];
 		}
-		if( keys.push( key + ' ' ) > core.cacheLength ) {
+		if( keys.push( key + ' ' ) > Dizzle.cacheLength ) {
 			delete cache[ keys.shift() ];
 		}
 		return ( cache[ key + ' ' ] = value );

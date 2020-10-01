@@ -8,6 +8,4 @@ Dizzle.err = msg => {
 	throw new Error( msg );
 };
 
-const core = Dizzle;
-
-export default core;
+export default Dizzle;

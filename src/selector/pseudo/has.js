@@ -1,5 +1,5 @@
-import core from "../../core";
+import Dizzle from "../../dizzle";
 
 export default function( elem, token ) {
-	return ( core.find( token.data, elem ).length > 0 );
+	return ( Dizzle.find( token.data, elem ).length > 0 );
 }
