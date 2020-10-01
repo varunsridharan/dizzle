@@ -1,21 +1,24 @@
 import babel from '@rollup/plugin-babel';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
+import nodeResolve from '@rollup/plugin-node-resolve';
 import { uglify } from 'rollup-plugin-uglify';
 import filesize from 'rollup-plugin-filesize';
 import visualizer from 'rollup-plugin-visualizer';
-import json from "@rollup/plugin-json";
 
 export default {
 	input: './src/index.js',
 	output: [
 		{
-			file: './dist/dizzle.js',
+			file: './dist/dizzle.es.js',
+			format: 'es',
+			name: 'dizzle',
+		},
+		{
+			file: './dist/dizzle.umd.js',
 			format: 'umd',
 			name: 'dizzle',
 		},
 		{
-			file: './dist/dizzle.min.js',
+			file: './dist/dizzle.umd.min.js',
 			format: 'umd',
 			name: 'dizzle',
 			plugins: [
@@ -24,12 +27,8 @@ export default {
 		}
 	],
 	plugins: [
-		resolve(),
-		json(),
-		babel( {
-			exclude: 'node_modules/**'
-		} ),
-		commonjs(),
+		nodeResolve(),
+		babel(),
 		filesize(),
 		visualizer()
 	]
