@@ -1317,12 +1317,46 @@
 	  return results;
 	}
 
+	function is(elem, selector) {
+	  try {
+	    return matches(elem, selector);
+	  } catch (e) {
+	    return parse(selector).reduce(function (results, tokens) {
+	      var i = 0,
+	          len = tokens.length,
+	          context = elem;
+
+	      while (i < len) {
+	        var token = tokens[i++];
+
+	        if (context) {
+	          switch (token.type) {
+	            case 'attr':
+	              if (!attrHandler(context, token)) {
+	                context = false;
+	              }
+
+	              break;
+
+	            case 'pseudo':
+	              context = pesudoHandler(context, token);
+	              break;
+	          }
+	        }
+	      }
+
+	      return context ? true : false;
+	    }, true);
+	  }
+	}
+
 	Dizzle.parse = parse;
 	Dizzle.find = engine;
 	Dizzle.cacheLength = 50;
 	Dizzle.combinators = combinators;
 	Dizzle.pesudo = pesudoHandlers;
 	Dizzle.attr = attrHandlers;
+	Dizzle.is = is;
 	setupMatcherFn();
 
 	return Dizzle;
