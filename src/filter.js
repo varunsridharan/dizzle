@@ -1,6 +1,6 @@
 import attrHandler from "./selector/attr";
-import isUndefined from "./typechecking/isUndefined";
 import pesudoHandler from "./selector/pseudo";
+import { isUndefined } from "@varunsridharan/js-is";
 
 export default function( element, token ) {
 	if( !isUndefined( token ) ) {

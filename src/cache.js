@@ -1,5 +1,5 @@
-import isUndefined from "./typechecking/isUndefined";
 import core from "./core";
+import { isUndefined } from "@varunsridharan/js-is";
 
 function createCache() {
 	let keys = [];

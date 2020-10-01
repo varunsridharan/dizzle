@@ -1,13 +1,12 @@
-import isString from "./typechecking/isString";
 import combinators from "./selector/combinators/index";
 import attrHandler from "./selector/attr/index";
 import parse from "./parser/parse";
-import isUndefined from "./typechecking/isUndefined";
 import { nativeQuery } from "./selector/query";
 import pesudoHandler, { pesudoHandlers } from "./selector/pseudo";
 import { currentDocument, isMarkedFunction } from "./helper";
 import { selectorResultsCache } from "./cache";
 import { _isArray } from "@varunsridharan/js-vars";
+import { isString, isUndefined } from "@varunsridharan/js-is";
 
 function nextToken( currentPos, tokens ) {
 	if( !isUndefined( tokens[ currentPos ] ) ) {
