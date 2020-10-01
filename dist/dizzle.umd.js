@@ -1016,7 +1016,43 @@
 	  }
 	}
 
-	function filter (element, token) {
+	var matcherFn = false;
+	function matches(el, selector) {
+	  return el[matcherFn](selector);
+	}
+	function setupMatcherFn() {
+	  matcherFn = ['matches', 'webkitMatchesSelector', 'msMatchesSelector'].reduce(function (fn, name) {
+	    return fn ? fn : name in docElem ? name : fn;
+	  }, null);
+	}
+
+	function isCheckCustom(selector, elem) {
+	  var r = parse(selector).reduce(function (results, tokens) {
+	    var i = 0,
+	        len = tokens.length,
+	        status = true;
+
+	    while (i < len) {
+	      var token = tokens[i++];
+
+	      if (status && ('attr' === token.type || 'pseudo' === token.type)) {
+	        status = filterElement(elem, token) ? elem : false;
+	      }
+	    }
+
+	    return status;
+	  }, true);
+	  return !!r;
+	}
+	function is(elem, selector) {
+	  try {
+	    return matches(elem, selector);
+	  } catch (e) {
+	    return isCheckCustom(selector, elem);
+	  }
+	}
+
+	function filterElement(element, token) {
 	  if (!isUndefined(token)) {
 	    switch (token.type) {
 	      case 'attr':
@@ -1028,6 +1064,11 @@
 	  }
 
 	  return true;
+	}
+	function filter(selector, elems) {
+	  return elems.filter(function (elem) {
+	    return isCheckCustom(selector, elem);
+	  });
 	}
 
 	/**
@@ -1109,21 +1150,11 @@
 
 	function child (selector, context, results, nextToken) {
 	  return results.concat(_filter.call(queryAll(selector, context), function (el) {
-	    return el.parentNode === context && filter(el, nextToken);
+	    return el.parentNode === context && filterElement(el, nextToken);
 	  }));
 	}
 
 	function parent$1 (selector, context, results, nextToken) {}
-
-	var matcherFn = false;
-	function matches(el, selector) {
-	  return el[matcherFn](selector);
-	}
-	function setupMatcherFn() {
-	  matcherFn = ['matches', 'webkitMatchesSelector', 'msMatchesSelector'].reduce(function (fn, name) {
-	    return fn ? fn : name in docElem ? name : fn;
-	  }, null);
-	}
 
 	function adjacent (selector, context, results) {
 	  var el = context.nextElementSibling;
@@ -1151,7 +1182,7 @@
 
 	function descendant (selector, context, results, nextToken) {
 	  return results.concat(_filter.call(queryAll(selector, context), function (el) {
-	    return filter(el, nextToken);
+	    return filterElement(el, nextToken);
 	  }));
 	}
 
@@ -1317,39 +1348,6 @@
 	  return results;
 	}
 
-	function is(elem, selector) {
-	  try {
-	    return matches(elem, selector);
-	  } catch (e) {
-	    return parse(selector).reduce(function (results, tokens) {
-	      var i = 0,
-	          len = tokens.length,
-	          context = elem;
-
-	      while (i < len) {
-	        var token = tokens[i++];
-
-	        if (context) {
-	          switch (token.type) {
-	            case 'attr':
-	              if (!attrHandler(context, token)) {
-	                context = false;
-	              }
-
-	              break;
-
-	            case 'pseudo':
-	              context = pesudoHandler(context, token);
-	              break;
-	          }
-	        }
-	      }
-
-	      return context ? true : false;
-	    }, true);
-	  }
-	}
-
 	Dizzle.parse = parse;
 	Dizzle.find = engine;
 	Dizzle.cacheLength = 50;
@@ -1357,6 +1355,7 @@
 	Dizzle.pesudo = pesudoHandlers;
 	Dizzle.attr = attrHandlers;
 	Dizzle.is = is;
+	Dizzle.filter = filter;
 	setupMatcherFn();
 
 	return Dizzle;
