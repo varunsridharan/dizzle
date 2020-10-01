@@ -13,6 +13,47 @@ ___Dizzle___ turns CSS selectors into functions that tests if elements match the
 ## Why?
 > Moving Out of jQuery & Using [PickledVanilla] has triggered me to create a library like this.
 
+## Usage 
+### Finding ELements
+```javascript
+/**
+ * Search For h2 elements inside div in whole document
+ */
+console.log(window.dizzle('div > h2'));
+
+/**
+ * Fetches All H2 Elements in document
+ * and loops into results and find span element in each h2 element
+ */
+var $h2 = window.dizzle('h2');
+$h2.forEach(function(element){
+    console.log(window.dizzle('span',element));
+});
+```
+
+### IS / Match Element `Pseudo`
+```javascript
+/**
+ * Fetches All H2 Elements in document
+ * and loops into results and find span element in each h2 element
+ */
+var $h2 = window.dizzle('h2');
+$h2.forEach(function(element){
+   
+    if(window.dizzle.is(':visible',element)){
+        // your code if h2 is visible 
+    }
+});
+```
+### Element Filter
+```javascript
+/**
+ * Filter All Visible H2 tags
+ */
+var visibleH2 = dizzle.filter(':visible',dizzle('h2'));
+```
+
+
 ## Supported Selectors
 | Combinators | Attributes | Pseudo |
 | :--- | :---: | ---: |
