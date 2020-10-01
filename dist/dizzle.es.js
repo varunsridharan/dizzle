@@ -1118,7 +1118,6 @@ function setupMatcherFn() {
     return fn ? fn : name in docElem ? name : fn;
   }, null);
 }
-setupMatcherFn();
 
 function adjacent (selector, context, results) {
   var el = context.nextElementSibling;
@@ -1315,5 +1314,9 @@ function engine (selector, context) {
 Dizzle.parse = parse;
 Dizzle.find = engine;
 Dizzle.cacheLength = 50;
+Dizzle.combinators = combinators;
+Dizzle.pesudo = pesudoHandlers;
+Dizzle.attr = attrHandlers;
+setupMatcherFn();
 
 export default Dizzle;
