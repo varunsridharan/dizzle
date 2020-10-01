@@ -1,7 +1,7 @@
 {
-  "name": "@wponion/pickledvanilla-js",
-  "description": " PickledVanilla wrapper for Vanilla JS ",
-  "version": "0.0.1",
+  "name": "dizzle",
+  "description": "~ Simple Fast CSS Selector Engine ~",
+  "version": "0.0.0",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c --watch",
@@ -24,14 +24,14 @@
   "repositories": [
     {
       "type": "git",
-      "url": "github.com:wponion/pickledvanilla-js.git"
+      "url": "github.com:varunsridharan/dizzle.git"
     }
   ],
   "licenses": [
     {
       "name": "MIT",
-      "url": "https://github.com/wponion/pickledvanilla-js/blob/master/LICENSE"
+      "url": "https://github.com/varunsridharan/dizzle/blob/master/LICENSE"
     }
   ],
-  "homepage": "https://github.com/wponion/pickledvanilla-JS"
+  "homepage": "https://github.com/varunsridharan/dizzle"
 }
