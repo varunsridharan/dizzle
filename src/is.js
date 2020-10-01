@@ -28,7 +28,7 @@ export default function is( elem, selector ) {
 				}
 			}
 
-			return ( context ) ? true : false;
+			return ( context );
 		}, true );
 	}
 

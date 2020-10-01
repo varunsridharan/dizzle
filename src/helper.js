@@ -1,5 +1,5 @@
 import Dizzle from "./dizzle";
-import {win} from "@varunsridharan/js-vars";
+import { win } from "@varunsridharan/js-vars";
 import { isFunction, isString } from "@varunsridharan/js-is";
 
 export const preferedDocument = win.document;
