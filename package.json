@@ -2,6 +2,7 @@
   "name": "dizzle",
   "description": "~ Simple Fast CSS Selector Engine ~",
   "version": "1.0.1",
+  "funding": "https://sva.onl/sponsor/",
   "main": "dist/dizzle.es.js",
   "scripts": {
     "build": "rollup -c",
