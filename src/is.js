@@ -19,7 +19,7 @@ export function isCheckCustom( selector, elem ) {
 	return !!( r );
 }
 
-export default function is( elem, selector ) {
+export default function is( selector, elem ) {
 	try {
 		return matcher( elem, selector );
 	} catch( e ) {
