@@ -19,5 +19,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Security
 -->
 
+## 1.0.1 - 03/10/2020
+* Improved Dist Source
+    -- `dizzle.es.js`  Can be used in ES 
+    -- `dizzle.umd.js` Can be used in browsers
+    -- `dizzle.umd.min.js` Can be used in browsers in min format
+
 ## 1.0.0 - 30/09/2020
 * First Release
