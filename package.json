@@ -1,7 +1,7 @@
 {
   "name": "dizzle",
   "description": "~ Simple Fast CSS Selector Engine ~",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "funding": "https://sva.onl/sponsor/",
   "main": "dist/dizzle.es.js",
   "scripts": {
@@ -29,11 +29,6 @@
       "url": "https://github.com/varunsridharan/dizzle.git"
     }
   ],
-  "licenses": [
-    {
-      "name": "MIT",
-      "url": "https://github.com/varunsridharan/dizzle/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "homepage": "https://github.com/varunsridharan/dizzle"
 }
