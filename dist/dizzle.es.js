@@ -1,10 +1,13 @@
-function Dizzle(selector, context) {
-  return Dizzle.find(selector, context);
+import { isUndefined, isString, isFunction } from '@varunsridharan/js-is';
+import { win, _isArray, _push, _filter } from '@varunsridharan/js-vars';
+
+function DizzleCore(selector, context) {
+  return DizzleCore.find(selector, context);
 }
 
-Dizzle.instanceID = 'dizzle' + 1 * new Date();
+DizzleCore.instanceID = 'dizzle' + 1 * new Date();
 
-Dizzle.err = function (msg) {
+DizzleCore.err = function (msg) {
   throw new Error(msg);
 };
 
@@ -21,44 +24,6 @@ rfindEscapeChar = /[-[\]{}()*+?.,\\^$|#\s]/g;
 
 var CombinatorTypes = ['>', '<', '~', '+'];
 
-/**
- * Array Related Vars.
- */
-var Arr = Array;
-var _Arrayprop = Arr.prototype;
-var _filter = _Arrayprop.filter;
-var _push = _Arrayprop.push;
-var _isArray = Arr.isArray;
-/**
- * Object Related Vars
- */
-
-var _obj = Object;
-/**
- * General Vars
- */
-
-var win = window;
-var doc = win.document;
-var celem = doc.createElement.bind(doc);
-
-function isObjectType(data, type) {
-  type = "[object " + type + "]" || "[object]";
-  return _obj.prototype.toString.call(data) === type;
-}
-function isType(data, type) {
-  return typeof data === type;
-}
-function isFunction(value) {
-  return isObjectType(value, 'Function') || isType(value, 'function');
-}
-function isString(value) {
-  return isObjectType(value, 'String');
-}
-function isUndefined(value) {
-  return value === void 0 || isType(value, 'undefined');
-}
-
 function createCache() {
   var keys = [];
 
@@ -67,7 +32,7 @@ function createCache() {
       return cache[key + ' '];
     }
 
-    if (keys.push(key + ' ') > Dizzle.cacheLength) {
+    if (keys.push(key + ' ') > DizzleCore.cacheLength) {
       delete cache[keys.shift()];
     }
 
@@ -130,7 +95,7 @@ function parseSelector(subselects, selector) {
     var match = selector.match(reName);
 
     if (!match) {
-      Dizzle.err("Expected name, found " + selector);
+      DizzleCore.err("Expected name, found " + selector);
     }
 
     var sub = match[0];
@@ -173,7 +138,7 @@ function parseSelector(subselects, selector) {
       stripWhitespace(1);
     } else if (firstChar === ',') {
       if (tokens.length === 0) {
-        Dizzle.err('Empty sub-selector');
+        DizzleCore.err('Empty sub-selector');
       }
 
       subselects.push(tokens);
@@ -214,7 +179,7 @@ function parseSelector(subselects, selector) {
         var attributeMatch = selector.match(reAttr);
 
         if (!attributeMatch) {
-          Dizzle.err("Malformed attribute selector: " + selector);
+          DizzleCore.err("Malformed attribute selector: " + selector);
         }
 
         var completeSelector = attributeMatch[0],
@@ -263,14 +228,14 @@ function parseSelector(subselects, selector) {
 
             if (quoted) {
               if (!selector.startsWith(quot)) {
-                Dizzle.err("Unmatched quotes in :" + _name2);
+                DizzleCore.err("Unmatched quotes in :" + _name2);
               } else {
                 selector = selector.substr(1);
               }
             }
 
             if (!selector.startsWith(')')) {
-              Dizzle.err("Missing closing parenthesis in :" + _name2 + " (" + selector + ")");
+              DizzleCore.err("Missing closing parenthesis in :" + _name2 + " (" + selector + ")");
             }
 
             selector = selector.substr(1);
@@ -287,7 +252,7 @@ function parseSelector(subselects, selector) {
             }
 
             if (counter) {
-              Dizzle.err('Parenthesis not matched');
+              DizzleCore.err('Parenthesis not matched');
             }
 
             data = selector.substr(1, pos - 2);
@@ -335,7 +300,7 @@ function parseSelector(subselects, selector) {
 
 function addToken(subselects, tokens) {
   if (subselects.length > 0 && tokens.length === 0) {
-    Dizzle.err('Empty sub-selector');
+    DizzleCore.err('Empty sub-selector');
   }
 
   subselects.push(tokens);
@@ -353,7 +318,7 @@ function parse(selector) {
   selector = parseSelector(subselects, "" + selector);
 
   if (selector !== '') {
-    Dizzle.err("Unmatched selector: " + selector);
+    DizzleCore.err("Unmatched selector: " + selector);
   }
 
   return parseCache(cached, subselects);
@@ -514,11 +479,11 @@ var preferedDocument = win.document;
 var currentDocument = preferedDocument,
     docElem = currentDocument.documentElement;
 function markFunction(fn) {
-  fn[Dizzle.instanceID] = true;
+  fn[DizzleCore.instanceID] = true;
   return fn;
 }
 function isMarkedFunction(fn) {
-  return isFunction(fn) && fn[Dizzle.instanceID] && fn[Dizzle.instanceID] === true;
+  return isFunction(fn) && fn[DizzleCore.instanceID] && fn[DizzleCore.instanceID] === true;
 }
 /**
  * Fetches Text Value From Nodes
@@ -942,7 +907,7 @@ function onlyOfType(elem) {
 }
 
 function has (elem, token) {
-  return Dizzle.find(token.data, elem).length > 0;
+  return DizzleCore.find(token.data, elem).length > 0;
 }
 
 var pesudoHandlers = {
@@ -1038,7 +1003,7 @@ function isCheckCustom(selector, elem) {
   }, true);
   return !!r;
 }
-function is(elem, selector) {
+function is(selector, elem) {
   try {
     return matches(elem, selector);
   } catch (e) {
@@ -1342,15 +1307,15 @@ function engine (selector, context) {
   return results;
 }
 
-Dizzle.version = '0.0.0';
-Dizzle.parse = parse;
-Dizzle.find = engine;
-Dizzle.cacheLength = 50;
-Dizzle.combinators = combinators;
-Dizzle.pesudo = pesudoHandlers;
-Dizzle.attr = attrHandlers;
-Dizzle.is = is;
-Dizzle.filter = filter;
+DizzleCore.version = '1.0.0';
+DizzleCore.parse = parse;
+DizzleCore.find = engine;
+DizzleCore.cacheLength = 50;
+DizzleCore.combinators = combinators;
+DizzleCore.pesudo = pesudoHandlers;
+DizzleCore.attr = attrHandlers;
+DizzleCore.is = is;
+DizzleCore.filter = filter;
 setupMatcherFn();
 
-export default Dizzle;
+export default DizzleCore;

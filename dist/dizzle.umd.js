@@ -4,13 +4,13 @@
 	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.dizzle = factory());
 }(this, (function () { 'use strict';
 
-	function Dizzle(selector, context) {
-	  return Dizzle.find(selector, context);
+	function DizzleCore(selector, context) {
+	  return DizzleCore.find(selector, context);
 	}
 
-	Dizzle.instanceID = 'dizzle' + 1 * new Date();
+	DizzleCore.instanceID = 'dizzle' + 1 * new Date();
 
-	Dizzle.err = function (msg) {
+	DizzleCore.err = function (msg) {
 	  throw new Error(msg);
 	};
 
@@ -73,7 +73,7 @@
 	      return cache[key + ' '];
 	    }
 
-	    if (keys.push(key + ' ') > Dizzle.cacheLength) {
+	    if (keys.push(key + ' ') > DizzleCore.cacheLength) {
 	      delete cache[keys.shift()];
 	    }
 
@@ -136,7 +136,7 @@
 	    var match = selector.match(reName);
 
 	    if (!match) {
-	      Dizzle.err("Expected name, found " + selector);
+	      DizzleCore.err("Expected name, found " + selector);
 	    }
 
 	    var sub = match[0];
@@ -179,7 +179,7 @@
 	      stripWhitespace(1);
 	    } else if (firstChar === ',') {
 	      if (tokens.length === 0) {
-	        Dizzle.err('Empty sub-selector');
+	        DizzleCore.err('Empty sub-selector');
 	      }
 
 	      subselects.push(tokens);
@@ -220,7 +220,7 @@
 	        var attributeMatch = selector.match(reAttr);
 
 	        if (!attributeMatch) {
-	          Dizzle.err("Malformed attribute selector: " + selector);
+	          DizzleCore.err("Malformed attribute selector: " + selector);
 	        }
 
 	        var completeSelector = attributeMatch[0],
@@ -269,14 +269,14 @@
 
 	            if (quoted) {
 	              if (!selector.startsWith(quot)) {
-	                Dizzle.err("Unmatched quotes in :" + _name2);
+	                DizzleCore.err("Unmatched quotes in :" + _name2);
 	              } else {
 	                selector = selector.substr(1);
 	              }
 	            }
 
 	            if (!selector.startsWith(')')) {
-	              Dizzle.err("Missing closing parenthesis in :" + _name2 + " (" + selector + ")");
+	              DizzleCore.err("Missing closing parenthesis in :" + _name2 + " (" + selector + ")");
 	            }
 
 	            selector = selector.substr(1);
@@ -293,7 +293,7 @@
 	            }
 
 	            if (counter) {
-	              Dizzle.err('Parenthesis not matched');
+	              DizzleCore.err('Parenthesis not matched');
 	            }
 
 	            data = selector.substr(1, pos - 2);
@@ -341,7 +341,7 @@
 
 	function addToken(subselects, tokens) {
 	  if (subselects.length > 0 && tokens.length === 0) {
-	    Dizzle.err('Empty sub-selector');
+	    DizzleCore.err('Empty sub-selector');
 	  }
 
 	  subselects.push(tokens);
@@ -359,7 +359,7 @@
 	  selector = parseSelector(subselects, "" + selector);
 
 	  if (selector !== '') {
-	    Dizzle.err("Unmatched selector: " + selector);
+	    DizzleCore.err("Unmatched selector: " + selector);
 	  }
 
 	  return parseCache(cached, subselects);
@@ -520,11 +520,11 @@
 	var currentDocument = preferedDocument,
 	    docElem = currentDocument.documentElement;
 	function markFunction(fn) {
-	  fn[Dizzle.instanceID] = true;
+	  fn[DizzleCore.instanceID] = true;
 	  return fn;
 	}
 	function isMarkedFunction(fn) {
-	  return isFunction(fn) && fn[Dizzle.instanceID] && fn[Dizzle.instanceID] === true;
+	  return isFunction(fn) && fn[DizzleCore.instanceID] && fn[DizzleCore.instanceID] === true;
 	}
 	/**
 	 * Fetches Text Value From Nodes
@@ -948,7 +948,7 @@
 	}
 
 	function has (elem, token) {
-	  return Dizzle.find(token.data, elem).length > 0;
+	  return DizzleCore.find(token.data, elem).length > 0;
 	}
 
 	var pesudoHandlers = {
@@ -1044,7 +1044,7 @@
 	  }, true);
 	  return !!r;
 	}
-	function is(elem, selector) {
+	function is(selector, elem) {
 	  try {
 	    return matches(elem, selector);
 	  } catch (e) {
@@ -1348,17 +1348,17 @@
 	  return results;
 	}
 
-	Dizzle.version = '0.0.0';
-	Dizzle.parse = parse;
-	Dizzle.find = engine;
-	Dizzle.cacheLength = 50;
-	Dizzle.combinators = combinators;
-	Dizzle.pesudo = pesudoHandlers;
-	Dizzle.attr = attrHandlers;
-	Dizzle.is = is;
-	Dizzle.filter = filter;
+	DizzleCore.version = '1.0.0';
+	DizzleCore.parse = parse;
+	DizzleCore.find = engine;
+	DizzleCore.cacheLength = 50;
+	DizzleCore.combinators = combinators;
+	DizzleCore.pesudo = pesudoHandlers;
+	DizzleCore.attr = attrHandlers;
+	DizzleCore.is = is;
+	DizzleCore.filter = filter;
 	setupMatcherFn();
 
-	return Dizzle;
+	return DizzleCore;
 
 })));
