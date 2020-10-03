@@ -1,4 +1,4 @@
-import Dizzle from "./dizzle";
+import DizzleCore from "./dizzlecore";
 import { win } from "@varunsridharan/js-vars";
 import { isFunction, isString } from "@varunsridharan/js-is";
 
@@ -7,12 +7,12 @@ export var currentDocument    = preferedDocument,
 		   docElem            = currentDocument.documentElement;
 
 export function markFunction( fn ) {
-	fn[ Dizzle.instanceID ] = true;
+	fn[ DizzleCore.instanceID ] = true;
 	return fn;
 }
 
 export function isMarkedFunction( fn ) {
-	return ( isFunction( fn ) && fn[ Dizzle.instanceID ] && fn[ Dizzle.instanceID ] === true );
+	return ( isFunction( fn ) && fn[ DizzleCore.instanceID ] && fn[ DizzleCore.instanceID ] === true );
 }
 
 /**

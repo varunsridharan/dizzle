@@ -1,4 +1,4 @@
-import Dizzle from "./dizzle";
+import Dizzle from "./dizzlecore";
 import parse from "./parser/parse";
 import engine from "./engine";
 import combinators from "./selector/combinators";
