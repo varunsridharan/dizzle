@@ -4,7 +4,7 @@
  * Stable Released V 3.4.1
  */
 import { reAttr, reEscape, reName } from "../regex";
-import DizzleCore from "../dizzlecore";
+import { err } from "../dizzlecore";
 import { CombinatorTypes } from "../vars";
 import { parseCache } from "../cache";
 
@@ -42,7 +42,7 @@ function parseSelector( subselects, selector ) {
 	function getName() {
 		const match = selector.match( reName );
 		if( !match ) {
-			DizzleCore.err( `Expected name, found ${selector}` );
+			err( `Expected name, found ${selector}` );
 		}
 		const [ sub ] = match;
 		selector      = selector.substr( sub.length );
@@ -78,7 +78,7 @@ function parseSelector( subselects, selector ) {
 			stripWhitespace( 1 );
 		} else if( firstChar === ',' ) {
 			if( tokens.length === 0 ) {
-				DizzleCore.err( 'Empty sub-selector' );
+				err( 'Empty sub-selector' );
 			}
 			subselects.push( tokens );
 			tokens = [];
@@ -107,7 +107,7 @@ function parseSelector( subselects, selector ) {
 				selector             = selector.substr( 1 );
 				const attributeMatch = selector.match( reAttr );
 				if( !attributeMatch ) {
-					DizzleCore.err( `Malformed attribute selector: ${selector}` );
+					err( `Malformed attribute selector: ${selector}` );
 				}
 				const [ completeSelector, baseName, actionType, , quotedValue = "", value = quotedValue, igCase, ] = attributeMatch;
 				selector                                                      = selector.substr( completeSelector.length );
@@ -138,13 +138,13 @@ function parseSelector( subselects, selector ) {
 						selector     = parseSelector( data, selector );
 						if( quoted ) {
 							if( !selector.startsWith( quot ) ) {
-								DizzleCore.err( `Unmatched quotes in :${name}` );
+								err( `Unmatched quotes in :${name}` );
 							} else {
 								selector = selector.substr( 1 );
 							}
 						}
 						if( !selector.startsWith( ')' ) ) {
-							DizzleCore.err( `Missing closing parenthesis in :${name} (${selector})` );
+							err( `Missing closing parenthesis in :${name} (${selector})` );
 						}
 						selector = selector.substr( 1 );
 					} else {
@@ -158,7 +158,7 @@ function parseSelector( subselects, selector ) {
 							}
 						}
 						if( counter ) {
-							DizzleCore.err( 'Parenthesis not matched' );
+							err( 'Parenthesis not matched' );
 						}
 						data     = selector.substr( 1, pos - 2 );
 						selector = selector.substr( pos );
@@ -191,7 +191,7 @@ function parseSelector( subselects, selector ) {
 
 function addToken( subselects, tokens ) {
 	if( subselects.length > 0 && tokens.length === 0 ) {
-		DizzleCore.err( 'Empty sub-selector' );
+		err( 'Empty sub-selector' );
 	}
 	subselects.push( tokens );
 }
@@ -205,7 +205,7 @@ export default function parse( selector ) {
 	const subselects = [];
 	selector         = parseSelector( subselects, `${selector}` );
 	if( selector !== '' ) {
-		DizzleCore.err( `Unmatched selector: ${selector}` );
+		err( `Unmatched selector: ${selector}` );
 	}
 	return parseCache( cached, subselects );
 }
