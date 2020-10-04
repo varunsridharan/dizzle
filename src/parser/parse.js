@@ -1,3 +1,8 @@
+/**
+ * This is a modified version of
+ * https://github.com/fb55/css-what/tree/eefc98a05fa29a402c6645e375df47d7f3958dfc
+ * Stable Released V 3.4.1
+ */
 import { reAttr, reEscape, reName } from "../regex";
 import DizzleCore from "../dizzlecore";
 import { CombinatorTypes } from "../vars";
@@ -7,7 +12,7 @@ const attribSelectors        = {
 		  '#': [ 'id', '=' ],
 		  '.': [ 'class', 'element' ],
 	  },
-	  unpackPseudos          = new Set( [ 'has', 'not', 'matches', 'is' ] ),
+	  unpackPseudos          = new Set( [ 'has', 'not', 'matches', 'is', 'host', 'host-context' ] ),
 	  stripQuotesFromPseudos = new Set( [ 'contains', 'icontains' ] ),
 	  quotes                 = new Set( [ '"', '\'' ] );
 
