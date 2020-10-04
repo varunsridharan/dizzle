@@ -16,7 +16,5 @@ export function filterElement( element, token ) {
 }
 
 export default function filter( selector, elems ) {
-	return elems.filter( function( elem ) {
-		return ( isCheckCustom( selector, elem ) );
-	} );
+	return elems.filter( ( elem ) => ( isCheckCustom( selector, elem ) ) );
 }

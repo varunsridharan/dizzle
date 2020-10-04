@@ -5,14 +5,9 @@ import { filterElement } from "./filter";
 export function isCheckCustom( selector, elem ) {
 	let r = parse( selector ).reduce( ( results, tokens ) => {
 		let i      = 0,
-			len    = tokens.length,
 			status = true;
-		while( i < len ) {
-			let token = tokens[ i++ ];
-
-			if( status && ( 'attr' === token.type || 'pseudo' === token.type ) ) {
-				status = ( filterElement( elem, token ) ) ? elem : false;
-			}
+		while( i < tokens.length ) {
+			status = ( filterElement( elem, tokens[ i++ ] ) ) ? elem : false;
 		}
 		return status;
 	}, true );

@@ -23,7 +23,9 @@ function nextToken( currentPos, tokens ) {
 }
 
 function validateToken( tokens ) {
-	return ( 'tag' === tokens[ 0 ].type || 'attr' === tokens[ 0 ].type && ( 'id' === tokens[ 0 ].id || 'class' === tokens[ 0 ].id ) ) ? tokens : [ { type: 'descendant' }, ...tokens ];
+	let type = tokens[ 0 ].type,
+		id   = tokens[ 0 ].id;
+	return ( 'tag' === type || 'attr' === type && ( 'id' === id || 'class' === id ) ) ? tokens : [ { type: 'descendant' }, ...tokens ];
 }
 
 export function findAdvanced( selectors, root ) {
@@ -53,14 +55,11 @@ export function findAdvanced( selectors, root ) {
 
 			switch( type ) {
 				case '*':
-					newToken = nextToken( i, tokens );
-					i        = newToken.pos;
-					context  = context.reduce( ( nodes, el ) => combinator_callback( '*', el, nodes, newToken.token ), [] );
-					break;
 				case 'tag':
-					newToken = nextToken( i, tokens );
-					i        = newToken.pos;
-					context  = context.reduce( ( nodes, el ) => combinator_callback( id, el, nodes, newToken.token ), [] );
+					let _selector = ( '*' === type ) ? '*' : id;
+					newToken      = nextToken( i, tokens );
+					i             = newToken.pos;
+					context       = context.reduce( ( nodes, el ) => combinator_callback( _selector, el, nodes, newToken.token ), [] );
 					break;
 				case 'attr':
 					if( 'id' === id || 'class' === id ) {

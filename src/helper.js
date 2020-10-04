@@ -7,12 +7,12 @@ export var currentDocument    = preferedDocument,
 		   docElem            = currentDocument.documentElement;
 
 export function markFunction( fn ) {
-	fn[ DizzleCore.instanceID ] = true;
+	fn[ DizzleCore.guid ] = true;
 	return fn;
 }
 
 export function isMarkedFunction( fn ) {
-	return ( isFunction( fn ) && fn[ DizzleCore.instanceID ] && fn[ DizzleCore.instanceID ] === true );
+	return ( isFunction( fn ) && fn[ DizzleCore.guid ] );
 }
 
 /**

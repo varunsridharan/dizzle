@@ -1,9 +1,11 @@
+import { _slice } from "@varunsridharan/js-vars";
+
 function isTag( elem ) {
 	return elem.nodeType === 1;
 }
 
 function getChildren( elem ) {
-	return elem.childNodes ? Array.prototype.slice.call( elem.childNodes, 0 ) : [];
+	return elem.childNodes ? _slice.call( elem.childNodes, 0 ) : [];
 }
 
 function getParent( elem ) {
