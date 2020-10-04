@@ -1,3 +1,4 @@
-export default function( result, totalFound, token ) {
-	return [ token.data < 0 ? token.data + totalFound : token.data ];
+export default function( elements, totalFound, token ) {
+	var val = token.data < 0 ? token.data + totalFound : token.data;
+	return [ elements[ val ] ];
 }

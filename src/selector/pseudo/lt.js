@@ -1,7 +1,13 @@
-export default function( result, totalFound, token ) {
-	let i = token.data < 0 ? token.data + totalFound : token.data > totalFound ? totalFound : token.data;
+import { isUndefined } from "@varunsridharan/js-is";
+
+export default function( elements, totalFound, token ) {
+	let result = [];
+	let i      = token.data < 0 ? token.data + totalFound : token.data > totalFound ? totalFound : token.data;
 	for( ; --i >= 0; ) {
-		result.push( i );
+		if( !isUndefined( elements[ i ] ) ) {
+			result.push( elements[ i ] );
+		}
+
 	}
 	return result;
 }

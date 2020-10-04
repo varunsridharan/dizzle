@@ -1,3 +1,3 @@
-export default function( result, totalFound ) {
-	return [ totalFound - 1 ];
+export default function( elements ) {
+	return [ elements[ elements.length - 1 ] ];
 }

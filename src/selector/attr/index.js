@@ -24,14 +24,17 @@ export const attrHandlers = {
 	'element': elementClass
 };
 export default function( el, token ) {
-	let status              = true;
-	let { action, id, val } = token;
-	let currentValue        = adapter.attr( el, id );
+	let status              = true,
+		{ action, id, val } = token,
+		currentValue        = adapter.attr( el, id );
+
 	if( currentValue === null ) {
 		return action === '!';
 	}
+
 	if( token.action in attrHandlers ) {
 		status = attrHandlers[ action ]( currentValue, val );
 	}
+
 	return status;
 }

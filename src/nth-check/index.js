@@ -55,33 +55,30 @@ function nthCheck_compile( parsed ) {
 function nthCheck_parse( formula ) {
 	formula = formula.trim().toLowerCase();
 
-	if( formula === 'even' ) {
-		return [ 2, 0 ];
-	} else if( formula === 'odd' ) {
-		return [ 2, 1 ];
-	} else {
-		var parsed = formula.match( /^([+\-]?\d*n)?\s*(?:([+\-]?)\s*(\d+))?$/ );
+	switch( formula ) {
+		case 'even':
+			return [ 2, 0 ];
+		case 'odd':
+			return [ 2, 1 ];
+		default:
+			var parsed = formula.match( /^([+\-]?\d*n)?\s*(?:([+\-]?)\s*(\d+))?$/ );
 
-		if( !parsed ) {
-			throw new SyntaxError( `n-th rule couldn't be parsed ('${formula}')` );
-		}
-
-		var a;
-
-		if( parsed[ 1 ] ) {
-			a = parseInt( parsed[ 1 ], 10 );
-			if( isNaN( a ) ) {
-				if( parsed[ 1 ].charAt( 0 ) === '-' ) {
-					a = -1;
-				} else {
-					a = 1;
-				}
+			if( !parsed ) {
+				throw new SyntaxError( `n-th rule couldn't be parsed ('${formula}')` );
 			}
-		} else {
-			a = 0;
-		}
 
-		return [ a, parsed[ 3 ] ? parseInt( ( parsed[ 2 ] || '' ) + parsed[ 3 ], 10 ) : 0 ];
+			var a;
+
+			if( parsed[ 1 ] ) {
+				a = parseInt( parsed[ 1 ], 10 );
+				if( isNaN( a ) ) {
+					a = ( parsed[ 1 ].charAt( 0 ) === '-' ) ? -1 : 1;
+				}
+			} else {
+				a = 0;
+			}
+
+			return [ a, parsed[ 3 ] ? parseInt( ( parsed[ 2 ] || '' ) + parsed[ 3 ], 10 ) : 0 ];
 	}
 }
 

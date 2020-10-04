@@ -1,3 +1,3 @@
-export default function() {
-	return [ 0 ];
+export default function( elements ) {
+	return [ elements[ 0 ] ];
 }

@@ -1,25 +1,19 @@
 import { markFunction } from "../../helper";
+import { isUndefined } from "@varunsridharan/js-is";
 
 export function createPositionalPseudo( fn ) {
 	return markFunction( ( elements, token ) => {
-		token.data       = +token.data;
-		var j, matches   = [],
-			matchIndexes = fn( [], elements.length, token ),
-			i            = matchIndexes.length;
-
-		while( i-- ) {
-			if( elements[ ( j = matchIndexes[ i ] ) ] ) {
-				elements[ j ] = !( matches[ j ] = elements[ j ] );
-			}
-		}
-		return matches;
+		token.data = +token.data;
+		return fn( elements, elements.length, token );
 	} );
 }
 
-export function oddOrEven( isodd, result, totalFound ) {
+export function oddOrEven( isodd, elements, totalFound, result ) {
 	var i = ( isodd ) ? 1 : 0;
 	for( ; i < totalFound; i += 2 ) {
-		result.push( i );
+		if( !isUndefined( elements[ i ] ) ) {
+			result.push( elements[ i ] );
+		}
 	}
 	return result;
 }
