@@ -1,54 +1,51 @@
 import babel from '@rollup/plugin-babel';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import { uglify } from 'rollup-plugin-uglify';
 import filesize from 'rollup-plugin-filesize';
 import visualizer from 'rollup-plugin-visualizer';
-import replace from "@rollup/plugin-replace";
 import pkg from "./package.json";
+import { terser } from "rollup-plugin-terser";
+import compiler from '@ampproject/rollup-plugin-closure-compiler';
+import license from 'rollup-plugin-license';
+import json from "@rollup/plugin-json";
 
-const outputName    = 'dizzle';
-const inputFile     = './src/index.js';
-const outputFile    = './dist/dizzle.';
-const replaceVals   = {
-	'__VERSION__': pkg.version,
-};
-const commonPlugins = [
-	replace( replaceVals ),
-	nodeResolve(),
-	babel(),
-	filesize(),
-	visualizer()
+const inputFile = './src/index.js';
+const files     = [
+	{ input: inputFile, format: 'es', external: [ '@varunsridharan/js-is', '@varunsridharan/js-vars' ] },
+	{ input: inputFile, format: 'umd', external: false },
+	{ input: inputFile, format: 'umd', external: false, minify: true, }
 ];
-
-export default [
-	{
-		input: inputFile,
-		plugins: commonPlugins,
-		external: [ '@varunsridharan/js-is', '@varunsridharan/js-vars' ],
+const config    = files.map( ( { input, format, external, minify } ) => {
+	return {
+		input: input,
+		external: external || '',
 		output: {
-			file: `${outputFile}es.js`,
-			name: outputName,
-			format: 'es'
-		}
+			file: `./dist/dizzle.${format}${minify ? '.min' : ''}.js`,
+			format: format,
+			name: 'dizzle',
+			sourcemap: true,
+		},
+		plugins: [
+			json(),
+			nodeResolve(),
+			babel( { babelHelpers: 'bundled' } ),
+			minify && compiler(),
+			minify && terser( {
+				output: {
+					beautify: false,
+					quote_style: 1,
+				},
+				mangle: true
+			} ),
+			license( {
+				banner: `${pkg.name} v${pkg.version} | <%= moment().format('DD-MM-YYYY') %> - MIT License`
+			} ),
+			filesize(),
+			visualizer( {
+				sourcemap: true,
+				filename: `stats/${format}${minify ? '.min' : ''}.html`,
+			} )
+		].filter( Boolean ),
+	};
+} ).flat();
 
-	},
-	{
-		input: inputFile,
-		plugins: commonPlugins,
-		output: [
-			{
-				file: `${outputFile}umd.js`,
-				format: 'umd',
-				name: outputName,
-			},
-			{
-				file: `${outputFile}umd.min.js`,
-				format: 'umd',
-				name: outputName,
-				plugins: [
-					uglify( { mangle: true } ),
-				]
-			}
-		],
-	}
-];
+export default config;

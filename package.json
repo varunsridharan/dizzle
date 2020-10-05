@@ -21,7 +21,7 @@
     "@varunsridharan/js-is": "*"
   },
   "devDependencies": {
-    "sofy": "^1.0.4"
+    "sofy": "^1.0.7"
   },
   "repositories": [
     {
