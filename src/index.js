@@ -7,8 +7,9 @@ import { attrHandlers } from "./selector/attr";
 import { setupMatcherFn } from "./selector/matcher";
 import is from "./is";
 import filter from "./filter";
+import { version } from "../package.json";
 
-Dizzle.version     = '__VERSION__';
+Dizzle.version     = version;
 Dizzle.parse       = parse;
 Dizzle.find        = engine;
 Dizzle.cacheLength = 50;
