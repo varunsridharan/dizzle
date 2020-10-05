@@ -3,8 +3,8 @@
 <head>
 	<title>Selectors</title>
 	<meta
-			http-equiv="Content-Type"
-			content="text/html; charset=iso-8859-1"
+		http-equiv="Content-Type"
+		content="text/html; charset=iso-8859-1"
 	/>
 	<meta http-equiv="Content-Style-Type" content="text/css"/>
 	<meta http-equiv="Content-Language" content="en"/>
@@ -379,7 +379,7 @@
 		<dt>This version:</dt>
 		<dd>
 			<a
-					href="http://www.w3.org/TR/2001/CR-css3-selectors-20011113"
+				href="http://www.w3.org/TR/2001/CR-css3-selectors-20011113"
 			>
 				http://www.w3.org/TR/2001/CR-css3-selectors-20011113</a
 			>
@@ -393,7 +393,7 @@
 		<dt>Previous version:</dt>
 		<dd>
 			<a
-					href="http://www.w3.org/TR/2001/WD-css3-selectors-20010126"
+				href="http://www.w3.org/TR/2001/WD-css3-selectors-20010126"
 			>
 				http://www.w3.org/TR/2001/WD-css3-selectors-20010126</a
 			>
@@ -418,7 +418,7 @@
 		<dd><a href="mailto:ian@hixie.ch">Ian Hickson</a></dd>
 		<dd>
 			Peter Linss (former editor, formerly of&nbsp;<span
-				class="company"
+			class="company"
 		><a href="http://www.netscape.com/"
 		>Netscape/AOL</a
 		></span
@@ -433,7 +433,7 @@
 	</dl>
 	<p class="copyright" id="somename" data-iscopyrighted="yes">
 		<a
-				href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#Copyright"
+			href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#Copyright"
 		>Copyright</a
 		>
 		©2001
@@ -446,27 +446,27 @@
 	>,
 		<a href="http://www.inria.fr/"
 		><abbr
-				lang="fr"
-				title="Institut National de Recherche en Informatique et Automatique"
+			lang="fr"
+			title="Institut National de Recherche en Informatique et Automatique"
 		>INRIA</abbr
 		></a
 		>, <a href="http://www.keio.ac.jp/">Keio</a>), All Rights
 		Reserved. W3C
 		<a
-				href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#Legal_Disclaimer"
+			href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#Legal_Disclaimer"
 		>liability</a
 		>,
 		<a
-				href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#W3C_Trademarks"
+			href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#W3C_Trademarks"
 		>trademark</a
 		>,
 		<a
-				href="http://www.w3.org/Consortium/Legal/copyright-documents-19990405"
+			href="http://www.w3.org/Consortium/Legal/copyright-documents-19990405"
 		>document use</a
 		>
 		and
 		<a
-				href="http://www.w3.org/Consortium/Legal/copyright-software-19980720"
+			href="http://www.w3.org/Consortium/Legal/copyright-software-19980720"
 		>software licensing</a
 		>
 		rules apply.
@@ -482,17 +482,30 @@
 
 <div class="body">
 	<h1>From Body Div.</h1>
+
+	<div class="parent">\
+		string\
+		<!-- COMMENT -->\
+		<div class="prevprev sibling"></div>
+		\
+		<div class="prev sibling"></div>
+		\
+		<div class="child sibling"></div>
+		\
+		<div class="next sibling"></div>
+		\
+		<div class="nextnext sibling"></div>
+		\
+	</div>
 </div>
 
-<script src="../dist/dizzle.js"></script>
+<script src="../dist/dizzle.umd.js"></script>
 <script>
-	//console.log( dizzle.parse( '#foo > .bar + div.k1.k2[id=\'baz\']:hello(2):not(:where(#yolo))::before' ) );
-	var selector = 'div.head p[data-iscopyrighted="yes"] span:last-child';
-	//console.log( dizzle.parse( selector ) );
 	console.time( 'Find' );
-	console.log( dizzle( 'div.head p[data-iscopyrighted!="yes"] span' ) );
+	//console.log( dizzle( 'div' ) );
+	//console.log( dizzle.filter( '.prevprev.sibling', dizzle( 'div' ) ) );
+	dizzle.filter( '.prevprev.sibling', dizzle( 'div' ) );
 	console.timeEnd( 'Find' );
-	//console.log( dizzle.parse( '.head' ) );
 </script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>gt demo</title>
 	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
-<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+	<script src="https://javascript.pc/dizzle/dist/dizzle.umd.js"></script>
 </head>
 <body>
 
@@ -27,8 +27,8 @@
 </table>
 
 <script>
-	$( dizzle( 'td:gt(4)' ) ).css( "backgroundColor", "yellow" );
-	$( dizzle( 'td:gt(-2)' ) ).css( "color", "red" );
+	wpopv( dizzle( 'td:gt(4)' ) ).css( "backgroundColor", "yellow" );
+	wpopv( dizzle( 'td:gt(-2)' ) ).css( "color", "red" );
 </script>
 
 </body>

@@ -9,7 +9,7 @@
 		}
 	</style>
 	<script src="https://javascript.pc/PickledVanilla/dist/wpopv.umd.js"></script>
-<script src="https://javascript.pc/dizzle/dist/dizzle.js"></script>
+<script src="https://javascript.pc/dizzle/dist/dizzle.umd.js"></script>
 </head>
 <body>
 
@@ -29,7 +29,9 @@
 </table>
 
 <script>
-	$( dizzle( 'tr:even' ) ).css( "background-color", "#bbf" );
+	console.time('Process');
+	wpopv( dizzle( 'tr:even' ) ).css( "background-color", "#bbf" );
+	console.timeEnd('Process');
 </script>
 
 </body>
