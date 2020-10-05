@@ -2,7 +2,7 @@
  * dizzle v1.0.2 | 05-10-2020 - MIT License
  */
 
-import { isUndefined, isString, isFunction } from '@varunsridharan/js-is';
+import { isUndefined, isNull, isString, isFunction } from '@varunsridharan/js-is';
 import { _slice, win, _isArray, _push, _filter } from '@varunsridharan/js-vars';
 
 function DizzleCore(selector, context) {
@@ -229,8 +229,8 @@ function parseSelector(subselects, selector) {
 
         if (selector.startsWith('(')) {
           if (unpackPseudos.has(_name2)) {
-            var quot = selector.charAt(1);
-            var quoted = quotes.has(quot);
+            var quot = selector.charAt(1),
+                quoted = quotes.has(quot);
             selector = selector.substr(quoted ? 2 : 1);
             data = [];
             selector = parseSelector(data, selector);
@@ -419,16 +419,14 @@ var attrHandlers = {
 function attrHandler (el, token) {
   var status = true,
       action = token.action,
-      id = token.id,
-      val = token.val,
-      currentValue = adapter.attr(el, id);
+      currentValue = adapter.attr(el, token.id);
 
-  if (currentValue === null) {
+  if (isNull(currentValue)) {
     return action === '!';
   }
 
-  if (token.action in attrHandlers) {
-    status = attrHandlers[action](currentValue, val);
+  if (action in attrHandlers) {
+    status = attrHandlers[action](currentValue, token.val);
   }
 
   return status;
@@ -569,9 +567,9 @@ function even (elements, totalFound) {
   return oddOrEven(false, elements, totalFound);
 }
 
-function lang (el, token) {
-  var elemLang,
-      data = token.data;
+function lang (el, _ref) {
+  var data = _ref.data;
+  var elemLang;
   data = data.toLowerCase();
 
   do {
@@ -596,9 +594,9 @@ function contains$1 (elem, token) {
   return (elem.textContent || getText(elem)).indexOf(token.data) > -1;
 }
 
-function eq (elements, totalFound, token) {
-  var val = token.data < 0 ? token.data + totalFound : token.data;
-  return [elements[val]];
+function eq (elements, totalFound, _ref) {
+  var data = _ref.data;
+  return [elements[data < 0 ? data + totalFound : data]];
 }
 
 function firstChild (elem) {
@@ -649,10 +647,10 @@ function lastOfType (elem) {
  * @see https://github.com/fb55/nth-check
  */
 
-/*
-	returns a function that checks if an elements index matches the given rule
-	highly optimized to return the fastest solution
-*/
+/**
+ * returns a function that checks if an elements index matches the given rule
+ * highly optimized to return the fastest solution
+ */
 function nthCheck_compile(parsed) {
   var a = parsed[0],
       b = parsed[1] - 1; //when b <= 0, a*n won't be possible for any matches when a < 0
@@ -701,11 +699,11 @@ function nthCheck_compile(parsed) {
     return pos <= b && pos % a === bMod;
   };
 }
-/*
-	parses a nth-check formula, returns an array of two numbers
-	//following http://www.w3.org/TR/css3-selectors/#nth-child-pseudo
-	//[ ['-'|'+']? INTEGER? {N} [ S* ['-'|'+'] S* INTEGER ]?
-*/
+/**
+ * parses a nth-check formula, returns an array of two numbers
+ * following http://www.w3.org/TR/css3-selectors/#nth-child-pseudo
+ * [ ['-'|'+']? INTEGER? {N} [ S* ['-'|'+'] S* INTEGER ]?
+ */
 
 
 function nthCheck_parse(formula) {
@@ -777,9 +775,10 @@ function odd (elements, totalFound) {
   return oddOrEven(true, elements, totalFound);
 }
 
-function gt (elements, totalFound, token) {
+function gt (elements, totalFound, _ref) {
+  var data = _ref.data;
   var result = [];
-  var i = token.data < 0 ? token.data + totalFound : token.data;
+  var i = data < 0 ? data + totalFound : data;
 
   for (; ++i < elements.length;) {
     if (!isUndefined(elements[i])) {
@@ -790,9 +789,10 @@ function gt (elements, totalFound, token) {
   return result;
 }
 
-function lt (elements, totalFound, token) {
+function lt (elements, totalFound, _ref) {
+  var data = _ref.data;
   var result = [];
-  var i = token.data < 0 ? token.data + totalFound : token.data > totalFound ? totalFound : token.data;
+  var i = data < 0 ? data + totalFound : data > totalFound ? totalFound : data;
 
   for (; --i >= 0;) {
     if (!isUndefined(elements[i])) {
@@ -906,8 +906,9 @@ function onlyOfType(elem) {
   return true;
 }
 
-function has (elem, token) {
-  return DizzleCore.find(token.data, elem).length > 0;
+function has (elem, _ref) {
+  var data = _ref.data;
+  return DizzleCore.find(data, elem).length > 0;
 }
 
 var pesudoHandlers = {
@@ -949,30 +950,19 @@ var pesudoHandlers = {
   pesudoHandlers[i] = createButtonPseudo(i);
 });
 function pesudoHandler(el, token) {
-  if (_isArray(el)) {
-    var id = token.id;
+  var id = token.id;
 
+  if (_isArray(el)) {
     if (id in pesudoHandlers) {
-      if (isMarkedFunction(pesudoHandlers[id])) {
-        el = pesudoHandlers[id](el, token);
-      } else {
-        el = el.filter(function (e) {
-          return pesudoHandlers[id](e, token);
-        });
-      }
+      el = isMarkedFunction(pesudoHandlers[id]) ? pesudoHandlers[id](el, token) : el.filter(function (e) {
+        return pesudoHandlers[id](e, token);
+      });
     }
 
     return el;
-  } else {
-    var status = true;
-    var _id = token.id;
-
-    if (_id in pesudoHandlers) {
-      status = pesudoHandlers[_id](el, token);
-    }
-
-    return status;
   }
+
+  return pesudoHandlers[id] ? pesudoHandlers[id](el, token) : true;
 }
 
 var matcherFn = false;
