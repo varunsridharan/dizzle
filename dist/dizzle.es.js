@@ -1,20 +1,24 @@
+/**
+ * dizzle v1.0.2 | 05-10-2020 - MIT License
+ */
+
 import { isUndefined, isString, isFunction } from '@varunsridharan/js-is';
-import { win, _isArray, _push, _filter } from '@varunsridharan/js-vars';
+import { _slice, win, _isArray, _push, _filter } from '@varunsridharan/js-vars';
 
 function DizzleCore(selector, context) {
   return DizzleCore.find(selector, context);
 }
 
-DizzleCore.instanceID = 'dizzle' + 1 * new Date();
-
-DizzleCore.err = function (msg) {
+function err(msg) {
   throw new Error(msg);
-};
+}
+DizzleCore.guid = 'dizzle' + 1 * new Date();
+DizzleCore.err = err;
 
 var reName = /^[^\\]?(?:\\(?:[\da-f]{1,6}\s?|.)|[\w\-\u00b0-\uFFFF])+/,
     reEscape = /\\([\da-f]{1,6}\s?|(\s)|.)/gi,
     // Modified version of https://github.com/jquery/sizzle/blob/master/src/sizzle.js#L87
-reAttr = /^\s*((?:\\.|[\w\u00b0-\uFFFF-])+)\s*(?:(\S?)=\s*(?:(['"])([^]*?)\3|(#?(?:\\.|[\w\u00b0-\uFFFF-])*)|)|)\s*(i)?\]/,
+reAttr = /^\s*((?:\\.|[\w\u00b0-\uFFFF-])+)\s*(?:(\S?)=\s*(?:(['"])((?:[^\\]|\\[^])*?)\3|(#?(?:\\.|[\w\u00b0-\uFFFF-])*)|)|)\s*(i)?\]/,
     // Easily-parseable/retrievable ID or TAG or CLASS selectors
 rquickExpr = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/,
     whitespace = '[\\x20\\t\\r\\n\\f]',
@@ -61,11 +65,16 @@ var nonNativeSelector = createCache();
 
 var selectorResultsCache = createCache();
 
+/**
+ * This is a modified version of
+ * https://github.com/fb55/css-what/tree/eefc98a05fa29a402c6645e375df47d7f3958dfc
+ * Stable Released V 3.4.1
+ */
 var attribSelectors = {
   '#': ['id', '='],
   '.': ['class', 'element']
 },
-    unpackPseudos = new Set(['has', 'not', 'matches', 'is']),
+    unpackPseudos = new Set(['has', 'not', 'matches', 'is', 'host', 'host-context']),
     stripQuotesFromPseudos = new Set(['contains', 'icontains']),
     quotes = new Set(['"', '\'']);
 /**
@@ -95,7 +104,7 @@ function parseSelector(subselects, selector) {
     var match = selector.match(reName);
 
     if (!match) {
-      DizzleCore.err("Expected name, found " + selector);
+      err("Expected name, found " + selector);
     }
 
     var sub = match[0];
@@ -138,7 +147,7 @@ function parseSelector(subselects, selector) {
       stripWhitespace(1);
     } else if (firstChar === ',') {
       if (tokens.length === 0) {
-        DizzleCore.err('Empty sub-selector');
+        err('Empty sub-selector');
       }
 
       subselects.push(tokens);
@@ -179,7 +188,7 @@ function parseSelector(subselects, selector) {
         var attributeMatch = selector.match(reAttr);
 
         if (!attributeMatch) {
-          DizzleCore.err("Malformed attribute selector: " + selector);
+          err("Malformed attribute selector: " + selector);
         }
 
         var completeSelector = attributeMatch[0],
@@ -228,14 +237,14 @@ function parseSelector(subselects, selector) {
 
             if (quoted) {
               if (!selector.startsWith(quot)) {
-                DizzleCore.err("Unmatched quotes in :" + _name2);
+                err("Unmatched quotes in :" + _name2);
               } else {
                 selector = selector.substr(1);
               }
             }
 
             if (!selector.startsWith(')')) {
-              DizzleCore.err("Missing closing parenthesis in :" + _name2 + " (" + selector + ")");
+              err("Missing closing parenthesis in :" + _name2 + " (" + selector + ")");
             }
 
             selector = selector.substr(1);
@@ -252,7 +261,7 @@ function parseSelector(subselects, selector) {
             }
 
             if (counter) {
-              DizzleCore.err('Parenthesis not matched');
+              err('Parenthesis not matched');
             }
 
             data = selector.substr(1, pos - 2);
@@ -300,7 +309,7 @@ function parseSelector(subselects, selector) {
 
 function addToken(subselects, tokens) {
   if (subselects.length > 0 && tokens.length === 0) {
-    DizzleCore.err('Empty sub-selector');
+    err('Empty sub-selector');
   }
 
   subselects.push(tokens);
@@ -318,7 +327,7 @@ function parse(selector) {
   selector = parseSelector(subselects, "" + selector);
 
   if (selector !== '') {
-    DizzleCore.err("Unmatched selector: " + selector);
+    err("Unmatched selector: " + selector);
   }
 
   return parseCache(cached, subselects);
@@ -343,7 +352,7 @@ function isTag(elem) {
 }
 
 function getChildren(elem) {
-  return elem.childNodes ? Array.prototype.slice.call(elem.childNodes, 0) : [];
+  return elem.childNodes ? _slice.call(elem.childNodes, 0) : [];
 }
 
 function getParent(elem) {
@@ -367,7 +376,7 @@ var adapter = {
 };
 
 function prefixedwith (currentValue, compareValue) {
-  return currentValue === compareValue || currentValue.slice(0, compareValue.length + 1) === compareValue + "-";
+  return equals(currentValue, compareValue) || currentValue.slice(0, compareValue.length + 1) === compareValue + "-";
 }
 
 function contains (currentValue, compareValue) {
@@ -388,9 +397,7 @@ function startswith (currentValue, compareValue) {
 
 function elementClass (currentValue, compareValue) {
   compareValue = compareValue.replace(rfindEscapeChar, '\\$&');
-  var pattern = "(?:^|\\s)" + compareValue + "(?:$|\\s)";
-  var regex = new RegExp(pattern, '');
-  return currentValue != null && regex.test(currentValue);
+  return currentValue != null && new RegExp("(?:^|\\s)" + compareValue + "(?:$|\\s)", '').test(currentValue);
 }
 
 var attrHandlers = {
@@ -410,11 +417,11 @@ var attrHandlers = {
   'element': elementClass
 };
 function attrHandler (el, token) {
-  var status = true;
-  var action = token.action,
+  var status = true,
+      action = token.action,
       id = token.id,
-      val = token.val;
-  var currentValue = adapter.attr(el, id);
+      val = token.val,
+      currentValue = adapter.attr(el, id);
 
   if (currentValue === null) {
     return action === '!';
@@ -428,10 +435,6 @@ function attrHandler (el, token) {
 }
 
 function empty (elem) {
-  // http://www.w3.org/TR/selectors/#empty-pseudo
-  // :empty is negated by element (1) or content nodes (text: 3; cdata: 4; entity ref: 5),
-  //   but not by others (comment: 8; processing instruction: 7; etc.)
-  // nodeType < 6 works because attributes (2) do not appear as children
   for (elem = elem.firstChild; elem; elem = elem.nextSibling) {
     if (elem.nodeType < 6) {
       return false;
@@ -479,11 +482,11 @@ var preferedDocument = win.document;
 var currentDocument = preferedDocument,
     docElem = currentDocument.documentElement;
 function markFunction(fn) {
-  fn[DizzleCore.instanceID] = true;
+  fn[DizzleCore.guid] = true;
   return fn;
 }
 function isMarkedFunction(fn) {
-  return isFunction(fn) && fn[DizzleCore.instanceID] && fn[DizzleCore.instanceID] === true;
+  return isFunction(fn) && fn[DizzleCore.guid];
 }
 /**
  * Fetches Text Value From Nodes
@@ -526,25 +529,16 @@ function getText(elem) {
 function createPositionalPseudo(fn) {
   return markFunction(function (elements, token) {
     token.data = +token.data;
-    var j,
-        matches = [],
-        matchIndexes = fn([], elements.length, token),
-        i = matchIndexes.length;
-
-    while (i--) {
-      if (elements[j = matchIndexes[i]]) {
-        elements[j] = !(matches[j] = elements[j]);
-      }
-    }
-
-    return matches;
+    return fn(elements, elements.length, token);
   });
 }
-function oddOrEven(isodd, result, totalFound) {
+function oddOrEven(isodd, elements, totalFound, result) {
   var i = isodd ? 1 : 0;
 
   for (; i < totalFound; i += 2) {
-    result.push(i);
+    if (!isUndefined(elements[i])) {
+      result.push(elements[i]);
+    }
   }
 
   return result;
@@ -571,8 +565,8 @@ function createButtonPseudo(type) {
   };
 }
 
-function even (result, totalFound) {
-  return oddOrEven(false, result, totalFound);
+function even (elements, totalFound) {
+  return oddOrEven(false, elements, totalFound);
 }
 
 function lang (el, token) {
@@ -602,8 +596,9 @@ function contains$1 (elem, token) {
   return (elem.textContent || getText(elem)).indexOf(token.data) > -1;
 }
 
-function eq (result, totalFound, token) {
-  return [token.data < 0 ? token.data + totalFound : token.data];
+function eq (elements, totalFound, token) {
+  var val = token.data < 0 ? token.data + totalFound : token.data;
+  return [elements[val]];
 }
 
 function firstChild (elem) {
@@ -658,7 +653,7 @@ function lastOfType (elem) {
 	returns a function that checks if an elements index matches the given rule
 	highly optimized to return the fastest solution
 */
-function compile(parsed) {
+function nthCheck_compile(parsed) {
   var a = parsed[0],
       b = parsed[1] - 1; //when b <= 0, a*n won't be possible for any matches when a < 0
   //besides, the specification says that no element is matched when a and b are 0
@@ -713,42 +708,41 @@ function compile(parsed) {
 */
 
 
-function parse$1(formula) {
+function nthCheck_parse(formula) {
   formula = formula.trim().toLowerCase();
 
-  if (formula === 'even') {
-    return [2, 0];
-  } else if (formula === 'odd') {
-    return [2, 1];
-  } else {
-    var parsed = formula.match(/^([+\-]?\d*n)?\s*(?:([+\-]?)\s*(\d+))?$/);
+  switch (formula) {
+    case 'even':
+      return [2, 0];
 
-    if (!parsed) {
-      throw new SyntaxError("n-th rule couldn't be parsed ('" + formula + "')");
-    }
+    case 'odd':
+      return [2, 1];
 
-    var a;
+    default:
+      var parsed = formula.match(/^([+\-]?\d*n)?\s*(?:([+\-]?)\s*(\d+))?$/);
 
-    if (parsed[1]) {
-      a = parseInt(parsed[1], 10);
-
-      if (isNaN(a)) {
-        if (parsed[1].charAt(0) === '-') {
-          a = -1;
-        } else {
-          a = 1;
-        }
+      if (!parsed) {
+        throw new SyntaxError("n-th rule couldn't be parsed ('" + formula + "')");
       }
-    } else {
-      a = 0;
-    }
 
-    return [a, parsed[3] ? parseInt((parsed[2] || '') + parsed[3], 10) : 0];
+      var a;
+
+      if (parsed[1]) {
+        a = parseInt(parsed[1], 10);
+
+        if (isNaN(a)) {
+          a = parsed[1].charAt(0) === '-' ? -1 : 1;
+        }
+      } else {
+        a = 0;
+      }
+
+      return [a, parsed[3] ? parseInt((parsed[2] || '') + parsed[3], 10) : 0];
   }
 }
 
 function nthCheck(formula) {
-  return compile(parse$1(formula));
+  return nthCheck_compile(nthCheck_parse(formula));
 }
 
 function nthOfType (el, token) {
@@ -771,33 +765,39 @@ function nthOfType (el, token) {
   return func(pos);
 }
 
-function first () {
-  return [0];
+function first (elements) {
+  return [elements[0]];
 }
 
-function last (result, totalFound) {
-  return [totalFound - 1];
+function last (elements) {
+  return [elements[elements.length - 1]];
 }
 
-function odd (result, totalFound) {
-  return oddOrEven(true, result, totalFound);
+function odd (elements, totalFound) {
+  return oddOrEven(true, elements, totalFound);
 }
 
-function gt (result, totalFound, token) {
+function gt (elements, totalFound, token) {
+  var result = [];
   var i = token.data < 0 ? token.data + totalFound : token.data;
 
-  for (; ++i < totalFound;) {
-    result.push(i);
+  for (; ++i < elements.length;) {
+    if (!isUndefined(elements[i])) {
+      result.push(elements[i]);
+    }
   }
 
   return result;
 }
 
-function lt (result, totalFound, token) {
+function lt (elements, totalFound, token) {
+  var result = [];
   var i = token.data < 0 ? token.data + totalFound : token.data > totalFound ? totalFound : token.data;
 
   for (; --i >= 0;) {
-    result.push(i);
+    if (!isUndefined(elements[i])) {
+      result.push(elements[i]);
+    }
   }
 
   return result;
@@ -988,15 +988,10 @@ function setupMatcherFn() {
 function isCheckCustom(selector, elem) {
   var r = parse(selector).reduce(function (results, tokens) {
     var i = 0,
-        len = tokens.length,
         status = true;
 
-    while (i < len) {
-      var token = tokens[i++];
-
-      if (status && ('attr' === token.type || 'pseudo' === token.type)) {
-        status = filterElement(elem, token) ? elem : false;
-      }
+    while (i < tokens.length) {
+      status = filterElement(elem, tokens[i++]) ? elem : false;
     }
 
     return status;
@@ -1113,8 +1108,6 @@ function child (selector, context, results, nextToken) {
   }));
 }
 
-function parent$1 (selector, context, results, nextToken) {}
-
 function adjacent (selector, context, results) {
   var el = context.nextElementSibling;
 
@@ -1147,7 +1140,7 @@ function descendant (selector, context, results, nextToken) {
 
 var combinators = {
   '>': child,
-  '<': parent$1,
+  //'<': parent,
   '+': adjacent,
   '~': sibling,
   ' ': descendant
@@ -1177,7 +1170,9 @@ function nextToken(currentPos, tokens) {
 }
 
 function validateToken(tokens) {
-  return 'tag' === tokens[0].type || 'attr' === tokens[0].type && ('id' === tokens[0].id || 'class' === tokens[0].id) ? tokens : [{
+  var type = tokens[0].type,
+      id = tokens[0].id;
+  return 'tag' === type || 'attr' === type && ('id' === id || 'class' === id) ? tokens : [{
     type: 'descendant'
   }].concat(tokens);
 }
@@ -1214,18 +1209,13 @@ function findAdvanced(selectors, root) {
 
       switch (type) {
         case '*':
-          newToken = nextToken(i, tokens);
-          i = newToken.pos;
-          context = context.reduce(function (nodes, el) {
-            return combinator_callback('*', el, nodes, newToken.token);
-          }, []);
-          break;
-
         case 'tag':
+          var _selector = '*' === type ? '*' : id;
+
           newToken = nextToken(i, tokens);
           i = newToken.pos;
           context = context.reduce(function (nodes, el) {
-            return combinator_callback(id, el, nodes, newToken.token);
+            return combinator_callback(_selector, el, nodes, newToken.token);
           }, []);
           break;
 
@@ -1234,10 +1224,10 @@ function findAdvanced(selectors, root) {
             newToken = nextToken(i, tokens);
             i = newToken.pos;
 
-            var _selector = 'id' === id ? '#' : '.';
+            var _selector2 = 'id' === id ? '#' : '.';
 
             context = context.reduce(function (nodes, el) {
-              return combinator_callback("" + _selector + token.val, el, nodes, newToken.token);
+              return combinator_callback("" + _selector2 + token.val, el, nodes, newToken.token);
             }, []);
           } else {
             context = context.filter(function (el) {
@@ -1307,7 +1297,9 @@ function engine (selector, context) {
   return results;
 }
 
-DizzleCore.version = '1.0.0';
+var version = "1.0.2";
+
+DizzleCore.version = version;
 DizzleCore.parse = parse;
 DizzleCore.find = engine;
 DizzleCore.cacheLength = 50;
@@ -1319,3 +1311,4 @@ DizzleCore.filter = filter;
 setupMatcherFn();
 
 export default DizzleCore;
+//# sourceMappingURL=dizzle.es.js.map
