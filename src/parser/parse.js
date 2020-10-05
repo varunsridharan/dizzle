@@ -8,10 +8,7 @@ import { err } from "../dizzlecore";
 import { CombinatorTypes } from "../vars";
 import { parseCache } from "../cache";
 
-const attribSelectors        = {
-		  '#': [ 'id', '=' ],
-		  '.': [ 'class', 'element' ],
-	  },
+const attribSelectors        = { '#': [ 'id', '=' ], '.': [ 'class', 'element' ] },
 	  unpackPseudos          = new Set( [ 'has', 'not', 'matches', 'is', 'host', 'host-context' ] ),
 	  stripQuotesFromPseudos = new Set( [ 'contains', 'icontains' ] ),
 	  quotes                 = new Set( [ '"', '\'' ] );
@@ -131,8 +128,8 @@ function parseSelector( subselects, selector ) {
 				let data   = null;
 				if( selector.startsWith( '(' ) ) {
 					if( unpackPseudos.has( name ) ) {
-						const quot   = selector.charAt( 1 );
-						const quoted = quotes.has( quot );
+						const quot   = selector.charAt( 1 ),
+							  quoted = quotes.has( quot );
 						selector     = selector.substr( quoted ? 2 : 1 );
 						data         = [];
 						selector     = parseSelector( data, selector );

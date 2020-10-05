@@ -1,9 +1,8 @@
 import adapter from "../../adapter";
 
-export default function( el, token ) {
-	let elemLang,
-		{ data } = token;
-	data         = data.toLowerCase();
+export default function( el, { data } ) {
+	let elemLang;
+	data = data.toLowerCase();
 	do {
 		if( ( elemLang = el.lang || adapter.attr( el, 'lang' ) ) ) {
 			elemLang = elemLang.toLowerCase();

@@ -2,10 +2,10 @@
  * @see https://github.com/fb55/nth-check
  */
 
-/*
-	returns a function that checks if an elements index matches the given rule
-	highly optimized to return the fastest solution
-*/
+/**
+ * returns a function that checks if an elements index matches the given rule
+ * highly optimized to return the fastest solution
+ */
 function nthCheck_compile( parsed ) {
 	var a = parsed[ 0 ],
 		b = parsed[ 1 ] - 1;
@@ -30,7 +30,6 @@ function nthCheck_compile( parsed ) {
 		return b < 0 ? true : pos => pos >= b;
 	}
 
-
 	//when a > 0, modulo can be used to check if there is a match
 	var bMod = b % a;
 
@@ -47,11 +46,11 @@ function nthCheck_compile( parsed ) {
 	return ( pos ) => pos <= b && pos % a === bMod;
 }
 
-/*
-	parses a nth-check formula, returns an array of two numbers
-	//following http://www.w3.org/TR/css3-selectors/#nth-child-pseudo
-	//[ ['-'|'+']? INTEGER? {N} [ S* ['-'|'+'] S* INTEGER ]?
-*/
+/**
+ * parses a nth-check formula, returns an array of two numbers
+ * following http://www.w3.org/TR/css3-selectors/#nth-child-pseudo
+ * [ ['-'|'+']? INTEGER? {N} [ S* ['-'|'+'] S* INTEGER ]?
+ */
 function nthCheck_parse( formula ) {
 	formula = formula.trim().toLowerCase();
 

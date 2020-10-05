@@ -75,24 +75,12 @@ export const pesudoHandlers = {
 } );
 
 export default function pesudoHandler( el, token ) {
+	let { id } = token;
 	if( _isArray( el ) ) {
-		let { id } = token;
 		if( id in pesudoHandlers ) {
-			if( isMarkedFunction( pesudoHandlers[ id ] ) ) {
-				el = pesudoHandlers[ id ]( el, token );
-			} else {
-				el = el.filter( e => pesudoHandlers[ id ]( e, token ) );
-			}
+			el = ( isMarkedFunction( pesudoHandlers[ id ] ) ) ? pesudoHandlers[ id ]( el, token ) : el.filter( e => pesudoHandlers[ id ]( e, token ) );
 		}
 		return el;
-	} else {
-		let status = true;
-		let { id } = token;
-
-		if( id in pesudoHandlers ) {
-			status = pesudoHandlers[ id ]( el, token );
-		}
-		return status;
 	}
-
+	return ( pesudoHandlers[ id ] ) ? pesudoHandlers[ id ]( el, token ) : true;
 }

@@ -7,6 +7,7 @@ import containsword from "./containsword";
 import endswith from "./endswith";
 import startswith from "./startswith";
 import elementClass from "./elementClass";
+import { isNull } from "@varunsridharan/js-is";
 
 export const attrHandlers = {
 	'=': equals,
@@ -24,16 +25,16 @@ export const attrHandlers = {
 	'element': elementClass
 };
 export default function( el, token ) {
-	let status              = true,
-		{ action, id, val } = token,
-		currentValue        = adapter.attr( el, id );
+	let status       = true,
+		{ action }   = token,
+		currentValue = adapter.attr( el, token.id );
 
-	if( currentValue === null ) {
+	if( isNull( currentValue ) ) {
 		return action === '!';
 	}
 
-	if( token.action in attrHandlers ) {
-		status = attrHandlers[ action ]( currentValue, val );
+	if( action in attrHandlers ) {
+		status = attrHandlers[ action ]( currentValue, token.val );
 	}
 
 	return status;
