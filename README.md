@@ -1,5 +1,9 @@
 ![https://cdn.svarun.dev/gh/varunsridharan/dizzle/banner.jpg](https://cdn.svarun.dev/gh/varunsridharan/dizzle/banner.jpg)
 
+<p align="center">
+<a href="https://www.producthunt.com/posts/dizzle-2?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-dizzle-2" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=269511&theme=dark" alt="Dizzle - ~ Simple Fast CSS Selector Engine ~ | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+</p>
+
 ## What?
 ___Dizzle___ turns CSS selectors into functions that tests if elements match them. When searching for elements, testing is executed "from the top", similar to how browsers execute CSS selectors.
 
@@ -8,10 +12,6 @@ ___Dizzle___ turns CSS selectors into functions that tests if elements match the
 * Partial implementation of jQuery/Sizzle extensions
 * Very high test coverage
 * Pretty good performance
-
-
-## Why?
-> Moving Out of jQuery & Using [PickledVanilla] has triggered me to create a library like this.
 
 ## Usage 
 ### Finding ELements
