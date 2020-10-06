@@ -6,6 +6,6 @@ export function err( msg ) {
 	throw new Error( msg );
 }
 
-DizzleCore.guid = 'dizzle' + ( 1 * new Date() );
-DizzleCore.err  = err;
+DizzleCore.uid = 'dizzle' + ( 1 * new Date() );
+DizzleCore.err = err;
 export default DizzleCore;
