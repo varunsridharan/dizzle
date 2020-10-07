@@ -1,6 +1,4 @@
-import adapter from "../../adapter";
-
-export default function( el, { data } ) {
+export default function( el, { data, adapter } ) {
 	let elemLang;
 	data = data.toLowerCase();
 	do {

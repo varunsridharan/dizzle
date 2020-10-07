@@ -1,32 +1,69 @@
 /**
- * dizzle v1.0.2 | 05-10-2020 - MIT License
+ * dizzle v1.0.2 | 07-10-2020 - MIT License
  */
 
-import { isUndefined, isNull, isString, isFunction } from '@varunsridharan/js-is';
-import { _slice, win, _isArray, _push, _filter } from '@varunsridharan/js-vars';
-
-function DizzleCore(selector, context) {
-  return DizzleCore.find(selector, context);
+function DizzleCore(selector, context, adapter) {
+  return DizzleCore.find(selector, context, adapter);
 }
 
 function err(msg) {
   throw new Error(msg);
 }
-DizzleCore.guid = 'dizzle' + 1 * new Date();
+DizzleCore.uid = 'dizzle' + 1 * new Date();
 DizzleCore.err = err;
 
 var reName = /^[^\\]?(?:\\(?:[\da-f]{1,6}\s?|.)|[\w\-\u00b0-\uFFFF])+/,
     reEscape = /\\([\da-f]{1,6}\s?|(\s)|.)/gi,
     // Modified version of https://github.com/jquery/sizzle/blob/master/src/sizzle.js#L87
 reAttr = /^\s*((?:\\.|[\w\u00b0-\uFFFF-])+)\s*(?:(\S?)=\s*(?:(['"])((?:[^\\]|\\[^])*?)\3|(#?(?:\\.|[\w\u00b0-\uFFFF-])*)|)|)\s*(i)?\]/,
-    // Easily-parseable/retrievable ID or TAG or CLASS selectors
-rquickExpr = /^(?:#([\w-]+)|(\w+)|\.([\w-]+))$/,
     whitespace = '[\\x20\\t\\r\\n\\f]',
     rwhitespace = new RegExp(whitespace + '+', 'g'),
     // Below Regex is used to find any issues with string such as using / or \ - _ (Any Special Char Thats Needs To Be Escaped)
 rfindEscapeChar = /[-[\]{}()*+?.,\\^$|#\s]/g;
 
 var CombinatorTypes = ['>', '<', '~', '+'];
+
+/**
+ * Array Related Vars.
+ */
+var Arr = Array;
+var _Arrayprop = Arr.prototype;
+var _filter = _Arrayprop.filter;
+var _push = _Arrayprop.push;
+var _slice = _Arrayprop.slice;
+var _isArray = Arr.isArray;
+/**
+ * Object Related Vars
+ */
+
+var _obj = Object;
+/**
+ * General Vars
+ */
+
+var win = window;
+var doc = win.document;
+var celem = doc.createElement.bind(doc);
+
+function isObjectType(data, type) {
+  type = "[object " + type + "]" || "[object]";
+  return _obj.prototype.toString.call(data) === type;
+}
+function isType(data, type) {
+  return typeof data === type;
+}
+function isNull(value) {
+  return value === null;
+}
+function isFunction(value) {
+  return isObjectType(value, 'Function') || isType(value, 'function');
+}
+function isString(value) {
+  return isObjectType(value, 'String');
+}
+function isUndefined(value) {
+  return value === void 0 || isType(value, 'undefined');
+}
 
 function createCache() {
   var keys = [];
@@ -52,12 +89,6 @@ function createCache() {
 
 
 var parseCache = createCache();
-/**
- * Stores All Non Native Selector Data.
- * @type {cache}
- */
-
-var nonNativeSelector = createCache();
 /**
  * Stores All Selector's Results in Cache
  * @type {cache}
@@ -324,7 +355,7 @@ function parse(selector) {
 
   cached = selector;
   var subselects = [];
-  selector = parseSelector(subselects, "" + selector);
+  selector = parseSelector(subselects, selector);
 
   if (selector !== '') {
     err("Unmatched selector: " + selector);
@@ -419,7 +450,7 @@ var attrHandlers = {
 function attrHandler (el, token) {
   var status = true,
       action = token.action,
-      currentValue = adapter.attr(el, token.id);
+      currentValue = token.adapter.attr(el, token.id);
 
   if (isNull(currentValue)) {
     return action === '!';
@@ -476,6 +507,24 @@ function enabled (elem) {
   return !disabled(elem);
 }
 
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
 var preferedDocument = win.document;
 var currentDocument = preferedDocument,
     docElem = currentDocument.documentElement;
@@ -523,6 +572,16 @@ function getText(elem) {
 
   return ret;
 }
+/**
+ * Checks & Returns Proper Adpater Function.
+ * @param _adapter
+ * @param _func
+ * @return {*}
+ */
+
+function adapterCall(_adapter) {
+  return _extends({}, adapter, _adapter);
+}
 
 function createPositionalPseudo(fn) {
   return markFunction(function (elements, token) {
@@ -568,7 +627,8 @@ function even (elements, totalFound) {
 }
 
 function lang (el, _ref) {
-  var data = _ref.data;
+  var data = _ref.data,
+      adapter = _ref.adapter;
   var elemLang;
   data = data.toLowerCase();
 
@@ -607,7 +667,8 @@ function lastChild (elem) {
   return !elem.nextElementSibling;
 }
 
-function firstOfType (elem) {
+function firstOfType (elem, _ref) {
+  var adapter = _ref.adapter;
   var siblings = adapter.getSiblings(elem);
 
   for (var i = 0; i < siblings.length; i++) {
@@ -625,7 +686,8 @@ function firstOfType (elem) {
   return false;
 }
 
-function lastOfType (elem) {
+function lastOfType (elem, _ref) {
+  var adapter = _ref.adapter;
   var siblings = adapter.getSiblings(elem);
 
   for (var i = siblings.length - 1; i >= 0; i--) {
@@ -743,8 +805,10 @@ function nthCheck(formula) {
   return nthCheck_compile(nthCheck_parse(formula));
 }
 
-function nthOfType (el, token) {
-  var func = nthCheck(token.data),
+function nthOfType (el, _ref) {
+  var data = _ref.data,
+      adapter = _ref.adapter;
+  var func = nthCheck(data),
       siblings = adapter.getSiblings(el);
   var pos = 0;
 
@@ -803,8 +867,10 @@ function lt (elements, totalFound, _ref) {
   return result;
 }
 
-function nthLastOfType (el, token) {
-  var func = nthCheck(token.data),
+function nthLastOfType (el, _ref) {
+  var data = _ref.data,
+      adapter = _ref.adapter;
+  var func = nthCheck(data),
       siblings = adapter.getSiblings(el);
   var pos = 0;
 
@@ -823,8 +889,10 @@ function nthLastOfType (el, token) {
   return func(pos);
 }
 
-function nthLastChild (el, token) {
-  var func = nthCheck(token.data),
+function nthLastChild (el, _ref) {
+  var data = _ref.data,
+      adapter = _ref.adapter;
+  var func = nthCheck(data),
       siblings = adapter.getSiblings(el);
   var pos = 0;
 
@@ -876,7 +944,8 @@ function text (elem) {
   return elem.nodeName.toLowerCase() === 'input' && elem.type === 'text' && ((attr = elem.getAttribute('type')) == null || attr.toLowerCase() === 'text');
 }
 
-function onlyChild(elem) {
+function onlyChild(elem, _ref) {
+  var adapter = _ref.adapter;
   var siblings = adapter.getSiblings(elem);
 
   for (var i = 0; i < siblings.length; i++) {
@@ -888,7 +957,8 @@ function onlyChild(elem) {
   return true;
 }
 
-function onlyOfType(elem) {
+function onlyOfType(elem, _ref) {
+  var adapter = _ref.adapter;
   var siblings = adapter.getSiblings(elem);
 
   for (var i = 0, j = siblings.length; i < j; i++) {
@@ -970,29 +1040,31 @@ function matches(el, selector) {
   return el[matcherFn](selector);
 }
 function setupMatcherFn() {
-  matcherFn = ['matches', 'webkitMatchesSelector', 'msMatchesSelector'].reduce(function (fn, name) {
+  matcherFn = ['matches', 'webkitMatchesSelector', 'msMatchesSelector', 'mozMatchesSelector', 'oMatchesSelector'].reduce(function (fn, name) {
     return fn ? fn : name in docElem ? name : fn;
   }, null);
 }
 
-function isCheckCustom(selector, elem) {
+function isCheckCustom(selector, elem, adapter) {
   var r = parse(selector).reduce(function (results, tokens) {
     var i = 0,
         status = true;
 
     while (i < tokens.length) {
-      status = filterElement(elem, tokens[i++]) ? elem : false;
+      var token = tokens[i++];
+      token.adapter = adapter;
+      status = filterElement(elem, token) ? elem : false;
     }
 
     return status;
   }, true);
   return !!r;
 }
-function is(selector, elem) {
+function is(selector, elem, adapter) {
   try {
     return matches(elem, selector);
   } catch (e) {
-    return isCheckCustom(selector, elem);
+    return isCheckCustom(selector, elem, adapterCall(adapter));
   }
 }
 
@@ -1009,64 +1081,12 @@ function filterElement(element, token) {
 
   return true;
 }
-function filter(selector, elems) {
+function filter(selector, elems, adapter) {
   return elems.filter(function (elem) {
-    return isCheckCustom(selector, elem);
+    return isCheckCustom(selector, elem, adapterCall(adapter));
   });
 }
 
-/**
- * Tries To Run Native Query Selectors.
- * @param selector
- * @param context
- * @return {boolean|[]}
- */
-
-function nativeQuery(selector, context) {
-  var results = [],
-      isNativeQuery = true !== nonNativeSelector(selector),
-      isNativeQueryData,
-      selector_id,
-      selector_class,
-      nodeType = context ? context.nodeType : 9;
-  /**
-   * Return False if query is already cached as none native
-   */
-
-  if (!isNativeQuery) {
-    return false;
-  }
-  /**
-   * If the Selector is simple then just use native query system.
-   */
-
-
-  if (nodeType !== 11) {
-    if (isNativeQueryData = rquickExpr.exec(selector)) {
-      if ((selector_id = isNativeQueryData[1]) && nodeType === 9) {
-        results.push(context.getElementById(selector_id));
-        return results;
-      } else if (isNativeQueryData[2]) {
-        _push.apply(results, context.getElementsByTagName(selector));
-
-        return results;
-      } else if (selector_class = isNativeQueryData[3]) {
-        _push.apply(results, context.getElementsByClassName(selector_class));
-
-        return results;
-      }
-    }
-  }
-
-  results = queryAll(selector, context);
-
-  if (false === results) {
-    nonNativeSelector(selector, true);
-    return false;
-  }
-
-  return results;
-}
 function queryAll(selector, context) {
   var results = [];
   /**
@@ -1167,7 +1187,7 @@ function validateToken(tokens) {
   }].concat(tokens);
 }
 
-function findAdvanced(selectors, root) {
+function findAdvanced(selectors, root, adapter) {
   selectors = isString(selectors) ? parse(selectors) : selectors;
   root = !_isArray(root) ? [root] : root;
   return selectors.reduce(function (results, tokens) {
@@ -1196,6 +1216,7 @@ function findAdvanced(selectors, root) {
       var _token = token,
           type = _token.type,
           id = _token.id;
+      token.adapter = adapter;
 
       switch (type) {
         case '*':
@@ -1204,6 +1225,7 @@ function findAdvanced(selectors, root) {
 
           newToken = nextToken(i, tokens);
           i = newToken.pos;
+          newToken.token.adapter = adapter;
           context = context.reduce(function (nodes, el) {
             return combinator_callback(_selector, el, nodes, newToken.token);
           }, []);
@@ -1213,6 +1235,7 @@ function findAdvanced(selectors, root) {
           if ('id' === id || 'class' === id) {
             newToken = nextToken(i, tokens);
             i = newToken.pos;
+            newToken.token.adapter = adapter;
 
             var _selector2 = 'id' === id ? '#' : '.';
 
@@ -1251,7 +1274,7 @@ function findAdvanced(selectors, root) {
     return results;
   }, []);
 }
-function engine (selector, context) {
+function engine (selector, context, adapter) {
   /**
    * Node Types
    * 1  -- Element Node
@@ -1276,11 +1299,11 @@ function engine (selector, context) {
   context = context || currentDocument;
 
   if (isString(selector)) {
-    results = nativeQuery(selector, context);
+    results = false; //nativeQuery( selector, context );
   }
 
   if (!results) {
-    results = findAdvanced(selector, context);
+    results = findAdvanced(selector, context, adapterCall(adapter));
   }
 
   selectorResultsCache(selector, results);

@@ -3,7 +3,7 @@ import attrHandler from "./selector/attr/index";
 import parse from "./parser/parse";
 import { nativeQuery } from "./selector/query";
 import pesudoHandler, { pesudoHandlers } from "./selector/pseudo";
-import { currentDocument, isMarkedFunction } from "./helper";
+import { adapterCall, currentDocument, isMarkedFunction } from "./helper";
 import { selectorResultsCache } from "./cache";
 import { _isArray } from "@varunsridharan/js-vars";
 import { isString, isUndefined } from "@varunsridharan/js-is";
@@ -28,7 +28,7 @@ function validateToken( tokens ) {
 	return ( 'tag' === type || 'attr' === type && ( 'id' === id || 'class' === id ) ) ? tokens : [ { type: 'descendant' }, ...tokens ];
 }
 
-export function findAdvanced( selectors, root ) {
+export function findAdvanced( selectors, root, adapter ) {
 	selectors = ( isString( selectors ) ) ? parse( selectors ) : selectors;
 	root      = ( !_isArray( root ) ) ? [ root ] : root;
 	return selectors.reduce( ( results, tokens ) => {
@@ -52,21 +52,24 @@ export function findAdvanced( selectors, root ) {
 			}
 
 			let { type, id } = token;
+			token.adapter    = adapter;
 
 			switch( type ) {
 				case '*':
 				case 'tag':
-					let _selector = ( '*' === type ) ? '*' : id;
-					newToken      = nextToken( i, tokens );
-					i             = newToken.pos;
-					context       = context.reduce( ( nodes, el ) => combinator_callback( _selector, el, nodes, newToken.token ), [] );
+					let _selector          = ( '*' === type ) ? '*' : id;
+					newToken               = nextToken( i, tokens );
+					i                      = newToken.pos;
+					newToken.token.adapter = adapter;
+					context                = context.reduce( ( nodes, el ) => combinator_callback( _selector, el, nodes, newToken.token ), [] );
 					break;
 				case 'attr':
 					if( 'id' === id || 'class' === id ) {
-						newToken      = nextToken( i, tokens );
-						i             = newToken.pos;
-						let _selector = ( 'id' === id ) ? '#' : '.';
-						context       = context.reduce( ( nodes, el ) => combinator_callback( `${_selector}${token.val}`, el, nodes, newToken.token ), [] );
+						newToken               = nextToken( i, tokens );
+						i                      = newToken.pos;
+						newToken.token.adapter = adapter;
+						let _selector          = ( 'id' === id ) ? '#' : '.';
+						context                = context.reduce( ( nodes, el ) => combinator_callback( `${_selector}${token.val}`, el, nodes, newToken.token ), [] );
 					} else {
 						context = context.filter( el => attrHandler( el, token ) );
 					}
@@ -88,7 +91,7 @@ export function findAdvanced( selectors, root ) {
 	}, [] );
 }
 
-export default function( selector, context ) {
+export default function( selector, context, adapter ) {
 	/**
 	 * Node Types
 	 * 1  -- Element Node
@@ -112,11 +115,11 @@ export default function( selector, context ) {
 	context = context || currentDocument;
 
 	if( isString( selector ) ) {
-		results = nativeQuery( selector, context );
+		results = false;//nativeQuery( selector, context );
 	}
 
 	if( !results ) {
-		results = findAdvanced( selector, context );
+		results = findAdvanced( selector, context, adapterCall( adapter ) );
 	}
 
 	selectorResultsCache( selector, results );

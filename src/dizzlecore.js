@@ -1,5 +1,5 @@
-function DizzleCore( selector, context ) {
-	return DizzleCore.find( selector, context );
+function DizzleCore( selector, context, adapter ) {
+	return DizzleCore.find( selector, context, adapter );
 }
 
 export function err( msg ) {

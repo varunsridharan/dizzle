@@ -1,6 +1,7 @@
 import DizzleCore from "./dizzlecore";
 import { win } from "@varunsridharan/js-vars";
-import { isFunction, isString } from "@varunsridharan/js-is";
+import { isFunction, isString, isUndefined } from "@varunsridharan/js-is";
+import adapter from "./adapter";
 
 export const preferedDocument = win.document;
 export var currentDocument    = preferedDocument,
@@ -49,4 +50,14 @@ export function getText( elem ) {
 		return elem.nodeValue;
 	}
 	return ret;
+}
+
+/**
+ * Checks & Returns Proper Adpater Function.
+ * @param _adapter
+ * @param _func
+ * @return {*}
+ */
+export function adapterCall( _adapter ) {
+	return { ...adapter, ..._adapter };
 }

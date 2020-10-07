@@ -2,6 +2,7 @@ import attrHandler from "./selector/attr";
 import pesudoHandler from "./selector/pseudo";
 import { isUndefined } from "@varunsridharan/js-is";
 import { isCheckCustom } from "./is";
+import { adapterCall } from "./helper";
 
 export function filterElement( element, token ) {
 	if( !isUndefined( token ) ) {
@@ -15,6 +16,6 @@ export function filterElement( element, token ) {
 	return true;
 }
 
-export default function filter( selector, elems ) {
-	return elems.filter( ( elem ) => ( isCheckCustom( selector, elem ) ) );
+export default function filter( selector, elems, adapter ) {
+	return elems.filter( ( elem ) => ( isCheckCustom( selector, elem, adapterCall( adapter ) ) ) );
 }

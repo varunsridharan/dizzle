@@ -1,6 +1,4 @@
-import adapter from "../../adapter";
-
-export default function onlyOfType( elem ) {
+export default function onlyOfType( elem, { adapter } ) {
 	const siblings = adapter.getSiblings( elem );
 
 	for( let i = 0, j = siblings.length; i < j; i++ ) {

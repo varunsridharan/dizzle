@@ -1,6 +1,4 @@
-import adapter from "../../adapter";
-
-export default function onlyChild( elem ) {
+export default function onlyChild( elem, { adapter } ) {
 	const siblings = adapter.getSiblings( elem );
 
 	for( let i = 0; i < siblings.length; i++ ) {

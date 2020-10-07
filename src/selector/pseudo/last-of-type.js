@@ -1,6 +1,4 @@
-import adapter from "../../adapter";
-
-export default function( elem ) {
+export default function( elem, { adapter } ) {
 	const siblings = adapter.getSiblings( elem );
 	for( let i = siblings.length - 1; i >= 0; i-- ) {
 		if( adapter.isTag( siblings[ i ] ) ) {

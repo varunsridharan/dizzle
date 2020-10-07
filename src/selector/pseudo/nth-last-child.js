@@ -1,8 +1,7 @@
 import nthCheck from "../../nth-check";
-import adapter from "../../adapter";
 
-export default function( el, token ) {
-	let func     = nthCheck( token.data ),
+export default function( el, { data, adapter } ) {
+	let func     = nthCheck( data ),
 		siblings = adapter.getSiblings( el );
 
 	let pos = 0;

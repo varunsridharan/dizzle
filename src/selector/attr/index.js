@@ -27,7 +27,7 @@ export const attrHandlers = {
 export default function( el, token ) {
 	let status       = true,
 		{ action }   = token,
-		currentValue = adapter.attr( el, token.id );
+		currentValue = token.adapter.attr( el, token.id );
 
 	if( isNull( currentValue ) ) {
 		return action === '!';
