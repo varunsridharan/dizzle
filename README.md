@@ -8,26 +8,48 @@
 ___Dizzle___ turns CSS selectors into functions that tests if elements match them. When searching for elements, testing is executed "from the top", similar to how browsers execute CSS selectors.
 
 ## Features:
-* Full implementation of CSS3 selectors
-* Partial implementation of jQuery/Sizzle extensions
-* Very high test coverage
+* Full implementation of CSS3 & CSS4 selectors
+* Partial implementation of jQuery extensions
 * Pretty good performance
 
 ## Usage 
-### Finding ELements
+Get **Dizzle** From [jsDelivr](https://cdn.jsdelivr.net/npm/dizzle/dist/dizzle.umd.min.js) and use it like this:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/dizzle/dist/dizzle.umd.min.js"></script>
+<script>
+  var divs = dizzle('div');
+  console.log(divs);
+</script>
+```
+
+**Dizzle** is also available through [npm](https://npmjs.com) as the [`dizzle`](https://npmjs.com/package/dizzle) package:
+
+    npm install --save dizzle
+
+That you can then use like this:
+
+```javascript
+import dizzle from "dizzle";
+
+dizzle.find('div.myelement');
+```
+
+## Documentation
+### Finding Elements
 ```javascript
 /**
  * Search For h2 elements inside div in whole document
  */
-console.log(window.dizzle('div > h2'));
+console.log(dizzle('div > h2'));
 
 /**
  * Fetches All H2 Elements in document
  * and loops into results and find span element in each h2 element
  */
-var $h2 = window.dizzle('h2');
+var $h2 = dizzle('h2');
 $h2.forEach(function(element){
-    console.log(window.dizzle('span',element));
+    console.log(dizzle('span',element));
 });
 ```
 
@@ -37,10 +59,10 @@ $h2.forEach(function(element){
  * Fetches All H2 Elements in document
  * and loops into results and find span element in each h2 element
  */
-var $h2 = window.dizzle('h2');
+var $h2 = dizzle('h2');
 $h2.forEach(function(element){
    
-    if(window.dizzle.is(':visible',element)){
+    if(dizzle.is(':visible',element)){
         // your code if h2 is visible 
     }
 });
@@ -51,6 +73,52 @@ $h2.forEach(function(element){
  * Filter All Visible H2 tags
  */
 var visibleH2 = dizzle.filter(':visible',dizzle('h2'));
+```
+
+## Custom Adapter Support
+```javascript
+const customAdapter = {
+	attr: function( elem, attrName ) {
+		if( 'custom-Name' === attrName ) {
+			return elem.getAttribute('customName');
+		}
+		return elem.getAttribute( attrName );
+	}
+};
+
+const attr = dizzle('[custom-Name="Yes"]',null,customAdapter)
+```
+
+### Custom Adapter Functions
+A custom adapter must implement the following functions:
+
+    isTag, getChildren, getParent, attr, getSiblings, getTagName
+    
+Please check [src/adapter.js](https://github.com/varunsridharan/dizzle/blob/main/src/adapter.js) for more information
+Custom adapters can be passed for all the below functions
+
+```javascript
+/**
+  * @param selector String
+  * @param context Parent Element / Root
+  * @param adapter Custom Adapter Function
+  */
+dizzle( selector, context, adapter );
+
+/**
+  * @param selector String
+  * @param elem Single Element Object
+  * @param adapter Custom Adapter Function
+  */
+dizzle.is( selector, elem, adapter )
+
+/**
+  * @param selector String
+  * @param elems Array of elements
+  * @param adapter Custom Adapter Function
+  */
+dizzle.filter( selector, elems, adapter )
+
 ```
 
 
