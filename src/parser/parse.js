@@ -200,7 +200,7 @@ export default function parse( selector ) {
 	}
 	cached           = selector;
 	const subselects = [];
-	selector         = parseSelector( subselects, `${selector}` );
+	selector         = parseSelector( subselects, selector );
 	if( selector !== '' ) {
 		err( `Unmatched selector: ${selector}` );
 	}
