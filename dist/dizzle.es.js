@@ -1310,7 +1310,7 @@ function engine (selector, context, adapter) {
   return results;
 }
 
-var version = "1.0.2";
+var version = "1.0.3";
 
 DizzleCore.version = version;
 DizzleCore.parse = parse;

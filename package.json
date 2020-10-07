@@ -1,9 +1,10 @@
 {
   "name": "dizzle",
   "description": "~ Simple Fast CSS Selector Engine ~",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "funding": "https://sva.onl/sponsor/",
-  "main": "dist/dizzle.es.js",
+  "main": "dist/dizzle.umd.js",
+  "module": "dist/dizzle.es.js",
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c --watch",
