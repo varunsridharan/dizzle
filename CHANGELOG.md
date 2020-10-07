@@ -19,6 +19,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Security
 -->
 
+## 1.0.3 - 07/10/2020
+* Changed `Dizzle.instanceID` to `Dizzle.guid`
+* Updated Rollup Config To Generate Optimzed Output Files
+
 ## 1.0.2 - 03/10/2020
 * Added License File
 * Minor Bug Fixes In `package.json`
