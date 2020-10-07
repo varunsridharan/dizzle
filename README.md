@@ -187,7 +187,7 @@ dizzle('p ~ span');
 ### Descendant ` `
 The descendant selector matches all elements that are descendants of a specified element.
 ```javascript
-dizzle('div p > span');
+dizzle('div p span');
 ```
 
 ---
