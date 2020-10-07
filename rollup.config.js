@@ -10,14 +10,13 @@ import json from "@rollup/plugin-json";
 
 const inputFile = './src/index.js';
 const files     = [
-	{ input: inputFile, format: 'es', external: [ '@varunsridharan/js-is', '@varunsridharan/js-vars' ] },
-	{ input: inputFile, format: 'umd', external: false },
-	{ input: inputFile, format: 'umd', external: false, minify: true, }
+	{ input: inputFile, format: 'es' },
+	{ input: inputFile, format: 'umd' },
+	{ input: inputFile, format: 'umd', minify: true, }
 ];
-const config    = files.map( ( { input, format, external, minify } ) => {
+const config    = files.map( ( { input, format, minify } ) => {
 	return {
 		input: input,
-		external: external || '',
 		output: {
 			file: `./dist/dizzle.${format}${minify ? '.min' : ''}.js`,
 			format: format,
