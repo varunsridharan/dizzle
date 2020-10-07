@@ -1,5 +1,5 @@
 /**
- * dizzle v1.0.2 | 07-10-2020 - MIT License
+ * dizzle v1.0.4 | 07-10-2020 - MIT License
  */
 
 function DizzleCore(selector, context, adapter) {
@@ -51,6 +51,9 @@ function isObjectType(data, type) {
 }
 function isType(data, type) {
   return typeof data === type;
+}
+function isObject(value) {
+  return isType(value, 'object');
 }
 function isNull(value) {
   return value === null;
@@ -1052,7 +1055,11 @@ function isCheckCustom(selector, elem, adapter) {
 
     while (i < tokens.length) {
       var token = tokens[i++];
-      token.adapter = adapter;
+
+      if (isObject(token)) {
+        token.adapter = adapter;
+      }
+
       status = filterElement(elem, token) ? elem : false;
     }
 
@@ -1156,18 +1163,22 @@ var combinators = {
   ' ': descendant
 };
 
-function nextToken(currentPos, tokens) {
+function nextToken(currentPos, tokens, adapter) {
   if (!isUndefined(tokens[currentPos])) {
     if (tokens[currentPos].type === 'pseudo') {
       if (!isMarkedFunction(pesudoHandlers[tokens[currentPos].id])) {
+        var token = tokens[currentPos++];
+        token.adapter = adapter;
         return {
-          token: tokens[currentPos++],
+          token: token,
           pos: currentPos
         };
       }
     } else if (tokens[currentPos].type !== 'combinators' && tokens[currentPos].type !== 'descendant') {
+      var _token = tokens[currentPos++];
+      _token.adapter = adapter;
       return {
-        token: tokens[currentPos++],
+        token: _token,
         pos: currentPos
       };
     }
@@ -1213,9 +1224,9 @@ function findAdvanced(selectors, root, adapter) {
         token = tokens[i++];
       }
 
-      var _token = token,
-          type = _token.type,
-          id = _token.id;
+      var _token2 = token,
+          type = _token2.type,
+          id = _token2.id;
       token.adapter = adapter;
 
       switch (type) {
@@ -1223,9 +1234,8 @@ function findAdvanced(selectors, root, adapter) {
         case 'tag':
           var _selector = '*' === type ? '*' : id;
 
-          newToken = nextToken(i, tokens);
+          newToken = nextToken(i, tokens, adapter);
           i = newToken.pos;
-          newToken.token.adapter = adapter;
           context = context.reduce(function (nodes, el) {
             return combinator_callback(_selector, el, nodes, newToken.token);
           }, []);
@@ -1233,9 +1243,8 @@ function findAdvanced(selectors, root, adapter) {
 
         case 'attr':
           if ('id' === id || 'class' === id) {
-            newToken = nextToken(i, tokens);
+            newToken = nextToken(i, tokens, adapter);
             i = newToken.pos;
-            newToken.token.adapter = adapter;
 
             var _selector2 = 'id' === id ? '#' : '.';
 
@@ -1310,7 +1319,7 @@ function engine (selector, context, adapter) {
   return results;
 }
 
-var version = "1.0.3";
+var version = "1.0.4";
 
 DizzleCore.version = version;
 DizzleCore.parse = parse;

@@ -2,15 +2,18 @@ import parse from "./parser/parse";
 import matcher from "./selector/matcher";
 import { filterElement } from "./filter";
 import { adapterCall } from "./helper";
+import { isObject } from "@varunsridharan/js-is";
 
 export function isCheckCustom( selector, elem, adapter ) {
 	let r = parse( selector ).reduce( ( results, tokens ) => {
 		let i      = 0,
 			status = true;
 		while( i < tokens.length ) {
-			let token     = tokens[ i++ ];
-			token.adapter = adapter;
-			status        = ( filterElement( elem, token ) ) ? elem : false;
+			let token = tokens[ i++ ];
+			if( isObject( token ) ) {
+				token.adapter = adapter;
+			}
+			status = ( filterElement( elem, token ) ) ? elem : false;
 		}
 		return status;
 	}, true );

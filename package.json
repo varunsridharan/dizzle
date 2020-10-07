@@ -1,7 +1,7 @@
 {
   "name": "dizzle",
   "description": "~ Simple Fast CSS Selector Engine ~",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "funding": "https://sva.onl/sponsor/",
   "main": "dist/dizzle.umd.js",
   "module": "dist/dizzle.es.js",

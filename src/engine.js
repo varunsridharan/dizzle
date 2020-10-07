@@ -8,14 +8,18 @@ import { selectorResultsCache } from "./cache";
 import { _isArray } from "@varunsridharan/js-vars";
 import { isString, isUndefined } from "@varunsridharan/js-is";
 
-function nextToken( currentPos, tokens ) {
+function nextToken( currentPos, tokens, adapter ) {
 	if( !isUndefined( tokens[ currentPos ] ) ) {
 		if( tokens[ currentPos ].type === 'pseudo' ) {
 			if( !isMarkedFunction( pesudoHandlers[ tokens[ currentPos ].id ] ) ) {
-				return { token: tokens[ currentPos++ ], pos: currentPos };
+				let token     = tokens[ currentPos++ ];
+				token.adapter = adapter;
+				return { token: token, pos: currentPos };
 			}
 		} else if( tokens[ currentPos ].type !== 'combinators' && tokens[ currentPos ].type !== 'descendant' ) {
-			return { token: tokens[ currentPos++ ], pos: currentPos };
+			let token     = tokens[ currentPos++ ];
+			token.adapter = adapter;
+			return { token: token, pos: currentPos };
 		}
 	}
 
@@ -57,19 +61,17 @@ export function findAdvanced( selectors, root, adapter ) {
 			switch( type ) {
 				case '*':
 				case 'tag':
-					let _selector          = ( '*' === type ) ? '*' : id;
-					newToken               = nextToken( i, tokens );
-					i                      = newToken.pos;
-					newToken.token.adapter = adapter;
-					context                = context.reduce( ( nodes, el ) => combinator_callback( _selector, el, nodes, newToken.token ), [] );
+					let _selector = ( '*' === type ) ? '*' : id;
+					newToken      = nextToken( i, tokens, adapter );
+					i             = newToken.pos;
+					context       = context.reduce( ( nodes, el ) => combinator_callback( _selector, el, nodes, newToken.token ), [] );
 					break;
 				case 'attr':
 					if( 'id' === id || 'class' === id ) {
-						newToken               = nextToken( i, tokens );
-						i                      = newToken.pos;
-						newToken.token.adapter = adapter;
-						let _selector          = ( 'id' === id ) ? '#' : '.';
-						context                = context.reduce( ( nodes, el ) => combinator_callback( `${_selector}${token.val}`, el, nodes, newToken.token ), [] );
+						newToken      = nextToken( i, tokens, adapter );
+						i             = newToken.pos;
+						let _selector = ( 'id' === id ) ? '#' : '.';
+						context       = context.reduce( ( nodes, el ) => combinator_callback( `${_selector}${token.val}`, el, nodes, newToken.token ), [] );
 					} else {
 						context = context.filter( el => attrHandler( el, token ) );
 					}
