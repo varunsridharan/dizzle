@@ -1,4 +1,4 @@
-name: On Release
+name: "Release - GPR-NPM"
 
 env:
   DIST_LOCATION: "./dist/"
@@ -16,7 +16,7 @@ on:
       - '*'
 
 jobs:
-  publish-npm:
+  publish-gpr-npm:
     name: "🚀  GPR - NPM Publisher"
     runs-on: ubuntu-latest
     steps:
